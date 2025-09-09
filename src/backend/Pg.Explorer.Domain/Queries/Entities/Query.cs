@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Pg.Explorer.Domain.ConnectionConfigurations;
 
-namespace Pg.Explorer.Domain.Queries;
+namespace Pg.Explorer.Domain.Queries.Entities;
 
 /// <summary>
 /// 
@@ -10,7 +10,7 @@ public class Query
 {
     public Guid Id { get; set; }
     public long ConnectionId { get; set; }
-    public virtual ConnectionConfiguration? ConnectionConfiguration { get; set; }
+    public virtual ConnectionCfg? ConnectionConfiguration { get; set; }
     public required string QueryBody { get; set; }
     public QueryType QueryType { get; set; }
     public DateTimeOffset ExecutedAt { get; set; }

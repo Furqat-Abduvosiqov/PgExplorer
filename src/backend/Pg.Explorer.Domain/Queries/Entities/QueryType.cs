@@ -1,4 +1,4 @@
-namespace Pg.Explorer.Domain.Queries;
+namespace Pg.Explorer.Domain.Queries.Entities;
 
 /// <summary>
 /// 

@@ -1,8 +1,8 @@
-﻿using Pg.Explorer.Domain.Queries;
+﻿using Pg.Explorer.Domain.Queries.Entities;
 
 namespace Pg.Explorer.Domain.ConnectionConfigurations;
 
-public class ConnectionConfiguration
+public class ConnectionCfg
 {
     public long Id { get; set; }
     public string? Name { get; set; }
