@@ -18,9 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{0F841365-F001-43EA-80F3-9B35C60F493E}"
 	ProjectSection(SolutionItems) = preProject
 		docs\README.md = docs\README.md
-		docs\General Representation.md = docs\General Representation.md
 		docs\Architecture.md = docs\Architecture.md
 		docs\Entities.md = docs\Entities.md
+		docs\Feature Overview.md = docs\Feature Overview.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PgExplorer.Integration.Tests", "tests\PgExplorer.Integration.Tests\PgExplorer.Integration.Tests.csproj", "{D74AD513-C718-497C-9952-2FD7452B390F}"
