@@ -6,7 +6,7 @@ using Pg.Explorer.Shared.Repositories.interfaces;
 namespace Pg.Explorer.Shared.Repositories;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class BaseRepository<TEntity> : IRepository<TEntity>  where TEntity : class
+public class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     protected readonly DbContext _context;
     protected readonly DbSet<TEntity> _dbSet;
@@ -68,7 +68,7 @@ public class BaseRepository<TEntity> : IRepository<TEntity>  where TEntity : cla
             ? await _dbSet.CountAsync()
             : await _dbSet.CountAsync(predicate);
     }
-    
+
     public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await _context.SaveChangesAsync(cancellationToken);

@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Features", "src\backend\Pg.Explorer.Features\Pg.Explorer.Features.csproj", "{0111A764-EE02-4BB6-B349-3C444A6D7750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Shared", "Pg.Explorer.Shared\Pg.Explorer.Shared.csproj", "{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Shared", "src\backend\Pg.Explorer.Shared\Pg.Explorer.Shared.csproj", "{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
