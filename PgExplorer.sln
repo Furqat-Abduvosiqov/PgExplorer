@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Domain", "src\b
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Infrastructure", "src\backend\Pg.Explorer.Infrastructure\Pg.Explorer.Infrastructure.csproj", "{F4B01632-016C-4BA3-B228-5302A2496D07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Features", "Pg.Explorer.Features\Pg.Explorer.Features.csproj", "{0111A764-EE02-4BB6-B349-3C444A6D7750}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Features", "src\backend\Pg.Explorer.Features\Pg.Explorer.Features.csproj", "{0111A764-EE02-4BB6-B349-3C444A6D7750}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
