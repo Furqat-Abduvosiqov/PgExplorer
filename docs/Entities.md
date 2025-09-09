@@ -7,7 +7,7 @@ Metadata is information we **read directly from PostgreSQL**, not stored by us.
 
 ## 📦 Entities (Stored in our DB)
 
-### Connections
+### Connection Configuration
 - **Connection_ID** (PK)
 - Name
 - Host
