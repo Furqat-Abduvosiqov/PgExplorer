@@ -1,8 +1,10 @@
-﻿using Pg.Explorer.Domain.Queries.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Pg.Explorer.Domain.Queries.Entities;
 
 namespace Pg.Explorer.Domain.ConnectionConfigurations;
 
-public class ConnectionCfg
+[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
+public class ConnectionConfig
 {
     public long Id { get; set; }
     public string? Name { get; set; }
@@ -13,5 +15,5 @@ public class ConnectionCfg
     public required string EncryptedPassword { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
-    public IEnumerable<Query> Queries { get; set; } = Enumerable.Empty<Query>();
+    public IEnumerable<QueryEntity> Queries { get; set; } = Enumerable.Empty<QueryEntity>();
 }

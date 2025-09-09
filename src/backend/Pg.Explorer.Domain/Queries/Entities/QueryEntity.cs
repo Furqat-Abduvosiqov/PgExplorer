@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using Pg.Explorer.Domain.ConnectionConfigurations;
 
 namespace Pg.Explorer.Domain.Queries.Entities;
@@ -6,11 +7,12 @@ namespace Pg.Explorer.Domain.Queries.Entities;
 /// <summary>
 /// 
 /// </summary>
-public class Query
+[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
+public class QueryEntity
 {
     public Guid Id { get; set; }
     public long ConnectionId { get; set; }
-    public virtual ConnectionCfg? ConnectionConfiguration { get; set; }
+    public virtual ConnectionConfig? ConnectionConfiguration { get; set; }
     public required string QueryBody { get; set; }
     public QueryType QueryType { get; set; }
     public DateTimeOffset ExecutedAt { get; set; }

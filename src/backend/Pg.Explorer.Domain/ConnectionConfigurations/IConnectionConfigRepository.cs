@@ -2,4 +2,4 @@
 
 namespace Pg.Explorer.Domain.ConnectionConfigurations;
 
-public interface IConnectionCfgRepository : IRepository<ConnectionCfg> { }
+public interface IConnectionConfigRepository : IRepository<ConnectionConfig> { }
