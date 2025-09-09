@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Features", "src\backend\Pg.Explorer.Features\Pg.Explorer.Features.csproj", "{0111A764-EE02-4BB6-B349-3C444A6D7750}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pg.Explorer.Shared", "Pg.Explorer.Shared\Pg.Explorer.Shared.csproj", "{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,18 @@ Global
 		{0111A764-EE02-4BB6-B349-3C444A6D7750}.Release|x64.Build.0 = Release|Any CPU
 		{0111A764-EE02-4BB6-B349-3C444A6D7750}.Release|x86.ActiveCfg = Release|Any CPU
 		{0111A764-EE02-4BB6-B349-3C444A6D7750}.Release|x86.Build.0 = Release|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Debug|x64.Build.0 = Debug|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Debug|x86.Build.0 = Debug|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Release|x64.ActiveCfg = Release|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Release|x64.Build.0 = Release|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,5 +151,6 @@ Global
 		{198D37C7-9707-4BC3-A4BA-9C561BB2083E} = {86CFCE22-7412-4DD0-A95C-A11413CB38E0}
 		{F4B01632-016C-4BA3-B228-5302A2496D07} = {86CFCE22-7412-4DD0-A95C-A11413CB38E0}
 		{0111A764-EE02-4BB6-B349-3C444A6D7750} = {86CFCE22-7412-4DD0-A95C-A11413CB38E0}
+		{6F05C768-B014-4CB0-BE96-8B20A54EF5EC} = {86CFCE22-7412-4DD0-A95C-A11413CB38E0}
 	EndGlobalSection
 EndGlobal
