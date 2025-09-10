@@ -28,6 +28,7 @@ public static class EndpointResultsExtensions
             ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Failure => StatusCodes.Status417ExpectationFailed,
             _ => StatusCodes.Status500InternalServerError
         };
 
@@ -47,6 +48,7 @@ public static class EndpointResultsExtensions
             ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Failure => StatusCodes.Status417ExpectationFailed,
             _ => StatusCodes.Status500InternalServerError
         };
 
