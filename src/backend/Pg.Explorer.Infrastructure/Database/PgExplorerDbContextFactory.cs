@@ -13,8 +13,8 @@ public class PgExplorerDbContextFactory : IDesignTimeDbContextFactory<PgExplorer
         // This can be overridden by setting the connection string in appsettings.json
         var connectionString = "Host=localhost;Database=PgExplorer;Username=postgres;Password=password";
 
-        optionsBuilder.UseNpgsql(connectionString, npgsqlOptions =>
-                npgsqlOptions.MigrationsHistoryTable("__MyMigrationsHistory", "pg_explorer"))
+        optionsBuilder
+            .UseNpgsql(connectionString)
             .UseSnakeCaseNamingConvention();
 
         return new PgExplorerDbContext(optionsBuilder.Options);

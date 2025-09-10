@@ -18,8 +18,7 @@ public static class DependencyInjection
 
         services.AddDbContext<PgExplorerDbContext>(x => x
             .EnableSensitiveDataLogging()
-            .UseNpgsql(postgresConnectionString,
-                npgsqlOptions => npgsqlOptions.MigrationsHistoryTable("__MyMigrationsHistory", "pg_explorer"))
+            .UseNpgsql(postgresConnectionString)
             .UseSnakeCaseNamingConvention()
         );
 
