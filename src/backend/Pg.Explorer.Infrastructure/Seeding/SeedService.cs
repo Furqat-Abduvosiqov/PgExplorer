@@ -28,16 +28,14 @@ public class SeedService
 
         if (!await _context.ConnectionConfigs.AnyAsync(cancellationToken))
         {
-            var defaultConnection = new ConnectionConfig
-            {
-                Name = "Localhost",
-                Host = "localhost",
-                Port = 5432,
-                DatabaseName = "postgres",
-                Username = "postgres",
-                EncryptedPassword = _encryptionService.EncryptPassword("password"),
-                CreatedAt = DateTimeOffset.UtcNow
-            };
+            var defaultConnection = ConnectionConfig.Create(
+                "Default",
+                "localhost",
+                5432,
+                "postgres",
+                "postgres",
+                _encryptionService.EncryptPassword("password")
+            );
 
             await _context.ConnectionConfigs.AddAsync(defaultConnection, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

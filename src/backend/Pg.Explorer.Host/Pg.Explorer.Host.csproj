@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Pg.Explorer.Features\Pg.Explorer.Features.csproj"/>
         <ProjectReference Include="..\Pg.Explorer.Infrastructure\Pg.Explorer.Infrastructure.csproj"/>
     </ItemGroup>
 

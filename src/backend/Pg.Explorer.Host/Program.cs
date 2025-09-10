@@ -1,3 +1,4 @@
+using Pg.Explorer.Features;
 using Pg.Explorer.Infrastructure;
 using Pg.Explorer.Infrastructure.Seeding;
 using Pg.Explorer.Shared;
@@ -9,6 +10,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddUtilities();
+builder.Services.AddFeatures();
 
 var app = builder.Build();
 
@@ -26,4 +28,5 @@ using (var scope = app.Services.CreateScope())
     await seeder.SeedAsync();
 }
 
+app.MapFeatures();
 app.Run();
