@@ -38,6 +38,44 @@ public class EncryptionService : IEncryptionService
         return Convert.ToBase64String(output);
     }
 
+    public string DecryptPassword(string encryptedPassword)
+    {
+        if (encryptedPassword == null) throw new ArgumentNullException(nameof(encryptedPassword));
+
+        if (OperatingSystem.IsWindows())
+        {
+            var protectedBytes = Convert.FromBase64String(encryptedPassword);
+            var entropy = Encoding.UTF8.GetBytes("PgExplorer-Entropy-v1");
+            var plainBytes = ProtectedData.Unprotect(protectedBytes, entropy, DataProtectionScope.CurrentUser);
+            return Encoding.UTF8.GetString(plainBytes);
+        }
+
+        // Non-Windows: AES-256-CBC — extract IV + ciphertext
+        var key = GetAesKeyFromEnvironment();
+        var combined = Convert.FromBase64String(encryptedPassword);
+
+        if (combined.Length < 16)
+            throw new InvalidOperationException("Encrypted data is too short — missing IV.");
+
+        // First 16 bytes = IV
+        var iv = new byte[16];
+        Buffer.BlockCopy(combined, 0, iv, 0, 16);
+
+        // Remaining bytes = ciphertext
+        var ciphertext = new byte[combined.Length - 16];
+        Buffer.BlockCopy(combined, 16, ciphertext, 0, ciphertext.Length);
+
+        using var aes = Aes.Create();
+        aes.Key = key;
+        aes.IV = iv;
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
+
+        using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        var plaintextBytes = decryptor.TransformFinalBlock(ciphertext, 0, ciphertext.Length);
+        return Encoding.UTF8.GetString(plaintextBytes);
+    }
+
     private static byte[] GetAesKeyFromEnvironment()
     {
         var base64 = Environment.GetEnvironmentVariable(AesKeyEnvVar);
