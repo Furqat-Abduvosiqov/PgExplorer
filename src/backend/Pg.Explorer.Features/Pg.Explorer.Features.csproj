@@ -6,4 +6,26 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="ErrorOr" Version="2.0.1"/>
+        <PackageReference Include="FluentValidation" Version="12.0.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0"/>
+        <PackageReference Include="MediatR" Version="13.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="ConnectionConfigs\DeleteConnectionConfig\"/>
+        <Folder Include="ConnectionConfigs\GetConnectionConfigList\"/>
+        <Folder Include="Queries\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Pg.Explorer.Domain\Pg.Explorer.Domain.csproj"/>
+    </ItemGroup>
+
 </Project>
