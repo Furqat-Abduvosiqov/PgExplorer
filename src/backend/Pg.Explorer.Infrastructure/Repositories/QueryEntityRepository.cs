@@ -5,7 +5,7 @@ using Pg.Explorer.Shared.Repositories;
 
 namespace Pg.Explorer.Infrastructure.Repositories;
 
-public class QueryEntityRepository : BaseRepository<QueryEntity>, IQueryEntityRepository
+public class QueryEntityRepository : BaseRepository<QueryEntity, Guid>, IQueryEntityRepository
 {
     public QueryEntityRepository(PgExplorerDbContext context) : base(context)
     {

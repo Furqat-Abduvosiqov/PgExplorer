@@ -4,7 +4,7 @@ using Pg.Explorer.Shared.Repositories;
 
 namespace Pg.Explorer.Infrastructure.Repositories;
 
-public class ConnectionConfigRepository : BaseRepository<ConnectionConfig>, IConnectionConfigRepository
+public class ConnectionConfigRepository : BaseRepository<ConnectionConfig, long>, IConnectionConfigRepository
 {
     public ConnectionConfigRepository(PgExplorerDbContext context) : base(context)
     {
