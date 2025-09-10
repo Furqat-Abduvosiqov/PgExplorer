@@ -8,7 +8,7 @@ using Pg.Explorer.Domain.ConnectionConfigurations;
 using Pg.Explorer.Features.Abstractions;
 using Pg.Explorer.Features.Extensions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.DeleteConnectionConfig;
+namespace Pg.Explorer.Features.Application_Features.ConnectionConfigs.DeleteConnectionConfig;
 
 internal sealed record DeleteConnectionConfigCommand(long Id) : IRequest<ErrorOr<Unit>>;
 

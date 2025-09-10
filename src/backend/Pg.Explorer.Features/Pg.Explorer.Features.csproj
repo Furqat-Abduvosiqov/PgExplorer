@@ -19,9 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="ConnectionConfigs\DeleteConnectionConfig\"/>
-        <Folder Include="ConnectionConfigs\GetConnectionConfigList\"/>
-        <Folder Include="Queries\"/>
+        <Folder Include="Application-Features\Queries\"/>
     </ItemGroup>
 
     <ItemGroup>

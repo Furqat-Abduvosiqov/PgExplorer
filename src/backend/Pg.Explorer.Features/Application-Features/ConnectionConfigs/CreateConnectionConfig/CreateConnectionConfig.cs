@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pg.Explorer.Domain.ConnectionConfigurations;
 using Pg.Explorer.Features.Abstractions;
-using Pg.Explorer.Features.ConnectionConfigs.Shared;
+using Pg.Explorer.Features.Application_Features.ConnectionConfigs.Shared;
 using Pg.Explorer.Features.Extensions;
 using Pg.Explorer.Shared.Encryptions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
+namespace Pg.Explorer.Features.Application_Features.ConnectionConfigs.CreateConnectionConfig;
 
 public sealed record CreateConnectionConfigRequest(
     string? Name,

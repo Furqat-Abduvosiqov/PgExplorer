@@ -1,4 +1,4 @@
-namespace Pg.Explorer.Features.ConnectionConfigs.UpdateConnectionConfig;
+namespace Pg.Explorer.Features.Application_Features.ConnectionConfigs.UpdateConnectionConfig;
 
 public static class UpdateConnectionConfigMapping
 {
