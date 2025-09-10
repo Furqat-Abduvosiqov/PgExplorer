@@ -8,7 +8,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.19"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.20"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.20"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Pg.Explorer.Infrastructure\Pg.Explorer.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

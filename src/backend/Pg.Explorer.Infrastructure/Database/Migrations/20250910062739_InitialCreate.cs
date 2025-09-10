@@ -1,0 +1,78 @@
+﻿using System;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+namespace Pg.Explorer.Infrastructure.Database.Migrations
+{
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "connection_configs",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    host = table.Column<string>(type: "text", nullable: false),
+                    port = table.Column<int>(type: "integer", nullable: false),
+                    database_name = table.Column<string>(type: "text", nullable: false),
+                    username = table.Column<string>(type: "text", nullable: false),
+                    encrypted_password = table.Column<string>(type: "text", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_connection_configs", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "queries",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    connection_id = table.Column<long>(type: "bigint", nullable: false),
+                    connection_configuration_id = table.Column<long>(type: "bigint", nullable: true),
+                    query_body = table.Column<string>(type: "text", nullable: false),
+                    query_type = table.Column<int>(type: "integer", nullable: false),
+                    executed_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    execution_time = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    query_status = table.Column<int>(type: "integer", nullable: false),
+                    error_message = table.Column<string>(type: "text", nullable: true),
+                    affected_rows = table.Column<int>(type: "integer", nullable: false),
+                    execution_result = table.Column<JsonDocument>(type: "jsonb", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_queries", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_queries_connection_configs_connection_configuration_id",
+                        column: x => x.connection_configuration_id,
+                        principalTable: "connection_configs",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_queries_connection_configuration_id",
+                table: "queries",
+                column: "connection_configuration_id");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "queries");
+
+            migrationBuilder.DropTable(
+                name: "connection_configs");
+        }
+    }
+}

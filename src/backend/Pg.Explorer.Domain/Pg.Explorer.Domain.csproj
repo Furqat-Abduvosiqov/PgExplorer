@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Pg.Explorer.Shared\Pg.Explorer.Shared.csproj" />
+        <ProjectReference Include="..\Pg.Explorer.Shared\Pg.Explorer.Shared.csproj"/>
     </ItemGroup>
 
 </Project>
