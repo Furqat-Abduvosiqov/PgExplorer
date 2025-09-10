@@ -1,4 +1,4 @@
-﻿namespace Pg.Explorer.Features.Application_Features.ConnectionConfigs.Shared;
+﻿namespace Pg.Explorer.Features.ConnectionConfigs.Shared;
 
 public sealed record ConnectionConfigResponse(
     long Id,

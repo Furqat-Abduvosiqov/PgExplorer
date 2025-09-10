@@ -1,7 +1,7 @@
 ﻿using Pg.Explorer.Domain.ConnectionConfigurations;
-using Pg.Explorer.Features.Application_Features.ConnectionConfigs.Shared;
+using Pg.Explorer.Features.ConnectionConfigs.Shared;
 
-namespace Pg.Explorer.Features.Application_Features.ConnectionConfigs.CreateConnectionConfig;
+namespace Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
 
 internal static class CreateConnectionConfigMappingExtension
 {

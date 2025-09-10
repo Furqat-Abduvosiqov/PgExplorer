@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Pg.Explorer.Features.Application_Features.ConnectionConfigs.UpdateConnectionConfig;
+namespace Pg.Explorer.Features.ConnectionConfigs.UpdateConnectionConfig;
 
 public class UpdateConnectionConfigValidators : AbstractValidator<UpdateConnectionConfigRequest>
 {

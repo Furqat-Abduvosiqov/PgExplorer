@@ -18,7 +18,6 @@ public class ConnectionConfig
     public required string Username { get; set; }
     public required string EncryptedPassword { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-
     public DateTimeOffset? UpdatedAt { get; set; }
 
     public IEnumerable<QueryEntity> Queries { get; set; } = Enumerable.Empty<QueryEntity>();
