@@ -5,6 +5,8 @@ using Pg.Explorer.Domain.ConnectionConfigurations;
 using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Infrastructure.Database;
 using Pg.Explorer.Infrastructure.Repositories;
+using Pg.Explorer.Infrastructure.Seeding;
+using Pg.Explorer.Shared.Encryptions;
 
 namespace Pg.Explorer.Infrastructure;
 
@@ -21,6 +23,8 @@ public static class DependencyInjection
             .UseSnakeCaseNamingConvention()
         );
 
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<SeedService>();
         services.AddScoped<IQueryEntityRepository, QueryEntityRepository>();
         services.AddScoped<IConnectionConfigRepository, ConnectionConfigRepository>();
 
