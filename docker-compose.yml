@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: pgexplorer-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: PgExplorer
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: src/backend/Pg.Explorer.Host/Dockerfile
+    container_name: pgexplorer-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: Host=db;Database=PgExplorer;Username=postgres;Password=password;Port=5432
+      # Optional: provide a stable AES key; otherwise entrypoint will generate one per container
+      # PGEXPLORER_AES_KEY: "${PGEXPLORER_AES_KEY}"
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: src/frontend/pg-explorer-client
+      dockerfile: Dockerfile
+    container_name: pgexplorer-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+
+volumes:
+  db_data:
+    driver: local
