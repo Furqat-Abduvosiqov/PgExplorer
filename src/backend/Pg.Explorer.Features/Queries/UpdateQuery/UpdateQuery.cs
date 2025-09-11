@@ -8,10 +8,10 @@ using Microsoft.Extensions.Logging;
 using Pg.Explorer.Domain.ConnectionConfigurations;
 using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Domain.Queries.Entities;
-using Pg.Explorer.Features.Abstractions;
-using Pg.Explorer.Features.Extensions;
 using Pg.Explorer.Features.Queries.Shared;
 using Pg.Explorer.Features.Queries.Shared.Services;
+using Pg.Explorer.Shared.Endpoints.Abstractions;
+using Pg.Explorer.Shared.Endpoints.Extensions;
 
 namespace Pg.Explorer.Features.Queries.UpdateQuery;
 

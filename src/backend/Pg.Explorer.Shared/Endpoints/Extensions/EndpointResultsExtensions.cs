@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Http;
 
-namespace Pg.Explorer.Features.Extensions;
+namespace Pg.Explorer.Shared.Endpoints.Extensions;
 
 public static class EndpointResultsExtensions
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace Pg.Explorer.Features.Abstractions;
+namespace Pg.Explorer.Shared.Endpoints.Abstractions;
 
 public interface IEndpoint
 {

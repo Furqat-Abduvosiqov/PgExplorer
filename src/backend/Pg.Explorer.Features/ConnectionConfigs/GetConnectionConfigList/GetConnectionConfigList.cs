@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pg.Explorer.Domain.ConnectionConfigurations;
-using Pg.Explorer.Features.Abstractions;
 using Pg.Explorer.Features.ConnectionConfigs.Shared;
-using Pg.Explorer.Features.Extensions;
+using Pg.Explorer.Shared.Endpoints.Abstractions;
+using Pg.Explorer.Shared.Endpoints.Extensions;
 using Pg.Explorer.Shared.Pagination;
 
 namespace Pg.Explorer.Features.ConnectionConfigs.GetConnectionConfigList;

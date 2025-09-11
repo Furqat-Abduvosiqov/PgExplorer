@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pg.Explorer.Domain.ConnectionConfigurations;
-using Pg.Explorer.Features.Abstractions;
-using Pg.Explorer.Features.Extensions;
+using Pg.Explorer.Shared.Endpoints.Abstractions;
+using Pg.Explorer.Shared.Endpoints.Extensions;
 
 namespace Pg.Explorer.Features.ConnectionConfigs.DeleteConnectionConfig;
 

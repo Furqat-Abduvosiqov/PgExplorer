@@ -2,9 +2,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Pg.Explorer.Features.Abstractions;
 using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
 using Pg.Explorer.Features.Queries.Shared.Services;
+using Pg.Explorer.Shared.Endpoints.Abstractions;
 
 namespace Pg.Explorer.Features;
 
