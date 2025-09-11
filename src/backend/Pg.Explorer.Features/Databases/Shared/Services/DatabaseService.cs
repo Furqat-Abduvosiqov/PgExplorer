@@ -170,9 +170,42 @@ public class DatabaseService(
         }
     }
 
-    public Task<ErrorOr<bool>> DropDatabaseAsync(long connectionId, string databaseName,
+    public async Task<ErrorOr<bool>> DropDatabaseAsync(long connectionId, string databaseName,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var connection = await connectionRepository.GetByIdAsync(connectionId, cancellationToken);
+        if (connection == null)
+            return Error.NotFound(
+                code: "ConnectionConfig.NotFound",
+                description: $"Connection config {connectionId} not found.");
+
+        try
+        {
+            await using var npgsqlConnection = new NpgsqlConnection(connectionService.GetConnectionString(connection));
+            await npgsqlConnection.OpenAsync(cancellationToken);
+
+            var terminateQuery = @"
+                    SELECT pg_terminate_backend(pg_stat_activity.pid)
+                    FROM pg_stat_activity
+                    WHERE pg_stat_activity.datname = @databaseName
+                      AND pid <> pg_backend_pid()";
+
+            await using var terminateCommand = new NpgsqlCommand(terminateQuery, npgsqlConnection);
+            terminateCommand.Parameters.AddWithValue("@databaseName", databaseName);
+            await terminateCommand.ExecuteNonQueryAsync(cancellationToken);
+
+
+            var dropQuery = $"DROP DATABASE \"{databaseName}\"";
+            await using var dropCommand = new NpgsqlCommand(dropQuery, npgsqlConnection);
+            await dropCommand.ExecuteNonQueryAsync(cancellationToken);
+
+            logger.LogInformation("Dropped database: {DatabaseName}", databaseName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error dropping database {DatabaseName}", databaseName);
+            return false;
+        }
     }
 }
