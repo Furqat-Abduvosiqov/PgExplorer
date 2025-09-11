@@ -142,10 +142,32 @@ public class DatabaseService(
         throw new NotImplementedException();
     }
 
-    public Task<ErrorOr<bool>> CreateDatabaseAsync(long connectionId, string databaseName,
+    public async Task<ErrorOr<bool>> CreateDatabaseAsync(long connectionId, string databaseName,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var connection = await connectionRepository.GetByIdAsync(connectionId, cancellationToken);
+        if (connection is null)
+            return Error.NotFound(code: "ConnectionConfig.NotFound",
+                description: $"Connection config {connectionId} not found.");
+
+        try
+        {
+            await using var npgsqlConnection = new NpgsqlConnection(connectionService.GetConnectionString(connection));
+            await npgsqlConnection.OpenAsync(cancellationToken);
+
+            var query = $"CREATE DATABASE \"{databaseName}\"";
+
+            await using var command = new NpgsqlCommand(query, npgsqlConnection);
+            await command.ExecuteNonQueryAsync(cancellationToken);
+
+            logger.LogInformation("Created database: {DatabaseName}", databaseName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error creating database {DatabaseName}", databaseName);
+            return false;
+        }
     }
 
     public Task<ErrorOr<bool>> DropDatabaseAsync(long connectionId, string databaseName,
