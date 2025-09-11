@@ -20,7 +20,7 @@ public class ConnectionConfig
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
 
-    public IEnumerable<QueryEntity> Queries { get; set; } = Enumerable.Empty<QueryEntity>();
+    public ICollection<QueryEntity> Queries { get; set; } = new List<QueryEntity>();
 
     public static ConnectionConfig Create(string? name, string host, int port, string databaseName, string username,
         string password)

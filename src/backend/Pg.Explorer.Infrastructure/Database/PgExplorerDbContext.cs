@@ -39,6 +39,12 @@ public class PgExplorerDbContext(DbContextOptions<PgExplorerDbContext> options) 
             .Property(q => q.QueryType)
             .HasConversion<string>()
             .HasColumnType("text");
+
+        modelBuilder.Entity<QueryEntity>()
+            .HasOne(q => q.Connection)
+            .WithMany(c => c.Queries)
+            .HasForeignKey(q => q.ConnectionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private static void MapEnum<TEnum>()

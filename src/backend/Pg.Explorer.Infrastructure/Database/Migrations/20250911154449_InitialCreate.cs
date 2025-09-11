@@ -42,7 +42,6 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     connection_id = table.Column<long>(type: "bigint", nullable: false),
-                    connection_configuration_id = table.Column<long>(type: "bigint", nullable: true),
                     query_body = table.Column<string>(type: "text", nullable: false),
                     query_type = table.Column<string>(type: "text", nullable: false),
                     executed_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -55,16 +54,17 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                 {
                     table.PrimaryKey("pk_queries", x => x.id);
                     table.ForeignKey(
-                        name: "fk_queries_connection_configs_connection_configuration_id",
-                        column: x => x.connection_configuration_id,
+                        name: "fk_queries_connection_configs_connection_id",
+                        column: x => x.connection_id,
                         principalTable: "connection_configs",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_queries_connection_configuration_id",
+                name: "ix_queries_connection_id",
                 table: "queries",
-                column: "connection_configuration_id");
+                column: "connection_id");
         }
 
         /// <inheritdoc />

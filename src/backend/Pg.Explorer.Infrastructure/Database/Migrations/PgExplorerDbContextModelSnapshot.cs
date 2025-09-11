@@ -24,7 +24,7 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "QueryType", new[] { "Read", "Write", "Delete", "Update" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Pg.Explorer.Domain.ConnectionConfigurations.ConnectionConfig", b =>
+            modelBuilder.Entity("Pg.Explorer.Domain.ConnectionConfigs.ConnectionConfig", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,10 +86,6 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("affected_rows");
 
-                    b.Property<long?>("ConnectionConfigurationId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("connection_configuration_id");
-
                     b.Property<long>("ConnectionId")
                         .HasColumnType("bigint")
                         .HasColumnName("connection_id");
@@ -124,23 +120,25 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                     b.HasKey("Id")
                         .HasName("pk_queries");
 
-                    b.HasIndex("ConnectionConfigurationId")
-                        .HasDatabaseName("ix_queries_connection_configuration_id");
+                    b.HasIndex("ConnectionId")
+                        .HasDatabaseName("ix_queries_connection_id");
 
                     b.ToTable("queries", (string)null);
                 });
 
             modelBuilder.Entity("Pg.Explorer.Domain.Queries.Entities.QueryEntity", b =>
                 {
-                    b.HasOne("Pg.Explorer.Domain.ConnectionConfigurations.ConnectionConfig", "ConnectionConfiguration")
+                    b.HasOne("Pg.Explorer.Domain.ConnectionConfigs.ConnectionConfig", "Connection")
                         .WithMany("Queries")
-                        .HasForeignKey("ConnectionConfigurationId")
-                        .HasConstraintName("fk_queries_connection_configs_connection_configuration_id");
+                        .HasForeignKey("ConnectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_queries_connection_configs_connection_id");
 
-                    b.Navigation("ConnectionConfiguration");
+                    b.Navigation("Connection");
                 });
 
-            modelBuilder.Entity("Pg.Explorer.Domain.ConnectionConfigurations.ConnectionConfig", b =>
+            modelBuilder.Entity("Pg.Explorer.Domain.ConnectionConfigs.ConnectionConfig", b =>
                 {
                     b.Navigation("Queries");
                 });
