@@ -9,7 +9,7 @@ using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 using Pg.Explorer.Shared.Pagination;
 
-namespace Pg.Explorer.Features.Schemas.GetTablesBySchemaName;
+namespace Pg.Explorer.Features.Tables.GetTableListBySchemaName;
 
 public record GetTableListQuery(
     string? Search,
@@ -60,15 +60,15 @@ public class GetTableListEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapGet("/api/schemas/{schemaName}/tables", Handle)
-            .WithTags("Schemas");
+        app.MapGet("/api/tables", Handle)
+            .WithTags("Tables");
     }
 
     private static async Task<IResult> Handle(
         IMediator mediator,
-        [FromRoute] string schemaName,
-        [FromQuery] string? search,
+        [FromQuery] string schemaName,
         [FromQuery] long connectionId,
+        [FromQuery] string? search,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
         [FromQuery] string? sortBy = null,
