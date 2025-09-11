@@ -28,7 +28,6 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddUtilities();
-builder.Services.AddAngularCors();
 builder.Services.AddFeatures();
 
 var app = builder.Build();

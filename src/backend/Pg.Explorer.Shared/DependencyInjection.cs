@@ -9,13 +9,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddUtilities(this IServiceCollection services)
     {
-        services.AddScoped<IEncryptionService, EncryptionService>();
-        services.AddTransient<GlobalExceptionHandlingMiddleware>();
-        return services;
-    }
-
-    public static IServiceCollection AddAngularCors(this IServiceCollection services)
-    {
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAngularApp", policy =>
@@ -27,6 +20,8 @@ public static class DependencyInjection
             });
         });
 
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddTransient<GlobalExceptionHandlingMiddleware>();
         return services;
     }
 
