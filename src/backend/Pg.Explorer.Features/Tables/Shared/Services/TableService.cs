@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Globalization;
 using System.Text;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
@@ -7,14 +7,18 @@ using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Domain.Queries.Entities;
 using Pg.Explorer.Features.Connections.Shared.Services;
+using Pg.Explorer.Features.Queries.Shared.Services;
+using Pg.Explorer.Features.Tables.DeleteRow;
 using Pg.Explorer.Features.Tables.ExportTable;
 using Pg.Explorer.Features.Tables.GetTableData;
 using Pg.Explorer.Features.Tables.InsertRow;
+using Pg.Explorer.Features.Tables.UpdateRow;
 
 namespace Pg.Explorer.Features.Tables.Shared.Services;
 
 public class TableService(
     IQueryEntityRepository queryRepository,
+    IQueryService queryService,
     IConnectionRepository connectionRepository,
     ILogger<TableService> logger,
     IConnectionService connectionService
@@ -29,84 +33,24 @@ public class TableService(
             return Error.NotFound("ConnectionConfig.NotFound",
                 $"Connection config {request.ConnectionId} not found.");
 
-        var query = QueryEntity.Create(connection.Id,
-            $"SELECT * FROM \"{request.SchemaName}\".\"{request.TableName}\" LIMIT @limit OFFSET @offset",
-            QueryType.Read);
+        var limit = request.PageSize;
+        var offset = (request.Page - 1) * request.PageSize;
 
-        var executionResult = new ExecutionResult
-        {
-            QueryText = query.QueryBody,
-            ExecutedAt = DateTimeOffset.UtcNow
-        };
+        var queryText = $@"
+        SELECT * 
+        FROM ""{request.SchemaName}"".""{request.TableName}""
+        LIMIT {limit} OFFSET {offset};";
 
-        var stopwatch = Stopwatch.StartNew();
+        var query = QueryEntity.Create(connection.Id, queryText, QueryType.Read);
 
-        try
-        {
-            await using var npgsqlConnection =
-                new NpgsqlConnection(connectionService.GetConnectionString(connection));
-            await npgsqlConnection.OpenAsync(cancellationToken);
+        var executionResult = await queryService.ExecuteQueryWithResultAsync(query, connection, cancellationToken);
 
-            await using var command = new NpgsqlCommand(query.QueryBody, npgsqlConnection);
-            command.Parameters.AddWithValue("@limit", request.PageSize);
-            command.Parameters.AddWithValue("@offset", (request.Page - 1) * request.PageSize);
+        await queryRepository.AddAsync(query, cancellationToken);
+        await queryRepository.SaveChangesAsync(cancellationToken);
 
-            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-            // Columns
-            for (int i = 0; i < reader.FieldCount; i++)
-                executionResult.Columns.Add(reader.GetName(i));
-
-            // Rows
-            while (await reader.ReadAsync(cancellationToken))
-            {
-                var row = new Dictionary<string, object?>();
-                for (int i = 0; i < reader.FieldCount; i++)
-                    row[executionResult.Columns[i]] = reader.IsDBNull(i) ? null : reader.GetValue(i);
-
-                executionResult.Data.Add(row);
-            }
-
-            stopwatch.Stop();
-
-            executionResult.RowsAffected = executionResult.Data.Count;
-            executionResult.Success = true;
-            executionResult.Message = $"Retrieved {executionResult.RowsAffected} rows (page {request.Page}).";
-            executionResult.ExecutionTime = stopwatch.Elapsed;
-
-            query.ExecutionTime = stopwatch.Elapsed;
-            query.QueryStatus = QueryStatus.Success;
-            query.ErrorMessage = null;
-            query.ExecutedAt = DateTimeOffset.UtcNow;
-            query.AffectedRows = executionResult.Data.Count;
-
-            await queryRepository.AddAsync(query, cancellationToken);
-
-            logger.LogInformation(
-                "Retrieved {Count} rows from {Schema}.{Table}, page {Page}",
-                executionResult.RowsAffected, request.SchemaName, request.TableName, request.Page);
-
-            return executionResult;
-        }
-        catch (Exception e)
-        {
-            stopwatch.Stop();
-
-            query.ExecutionTime = stopwatch.Elapsed;
-            query.QueryStatus = QueryStatus.Error;
-            query.ErrorMessage = e.Message;
-            query.ExecutedAt = DateTimeOffset.UtcNow;
-
-            await queryRepository.AddAsync(query, cancellationToken);
-
-            logger.LogError(e, "Error retrieving data from {Schema}.{Table}",
-                request.SchemaName, request.TableName);
-
-            return Error.Failure("Tables.QueryError", $"Failed to retrieve table data: {e.Message}");
-        }
-        finally
-        {
-            await queryRepository.SaveChangesAsync(cancellationToken);
-        }
+        return executionResult.Success
+            ? executionResult
+            : Error.Failure("Tables.QueryError", $"Failed to retrieve table data: {executionResult.Message}");
     }
 
     public async Task<ErrorOr<ExecutionResult>> InsertRowAsync(
@@ -119,44 +63,24 @@ public class TableService(
                 $"Connection config {request.ConnectionId} not found.");
 
         var columns = string.Join(", ", request.RowData.Keys.Select(k => $"\"{k}\""));
-        var parameters = string.Join(", ", request.RowData.Keys.Select((_, i) => $"@p{i}"));
-        var query = $"INSERT INTO \"{request.SchemaName}\".\"{request.TableName}\" ({columns}) VALUES ({parameters})";
+        var values = string.Join(", ", request.RowData.Values.Select(ToSqlLiteral));
 
-        try
-        {
-            await using var npgsqlConnection =
-                new NpgsqlConnection(connectionService.GetConnectionString(connection));
-            await npgsqlConnection.OpenAsync(cancellationToken);
+        var sql = $"INSERT INTO \"{request.SchemaName}\".\"{request.TableName}\" ({columns}) VALUES ({values});";
 
-            await using var command = new NpgsqlCommand(query, npgsqlConnection);
+        var query = QueryEntity.Create(connection.Id, sql, QueryType.Write);
 
-            int i = 0;
-            foreach (var kvp in request.RowData)
-                command.Parameters.AddWithValue($"@p{i++}", kvp.Value ?? DBNull.Value);
+        var result = await queryService.ExecuteQueryWithResultAsync(query, connection, cancellationToken);
 
-            var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+        await queryRepository.AddAsync(query, cancellationToken);
+        await queryRepository.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Inserted row into {Schema}.{Table}, {Count} row(s) affected",
-                request.SchemaName, request.TableName, affected);
-
-            return new ExecutionResult
-            {
-                QueryText = query,
-                ExecutedAt = DateTimeOffset.UtcNow,
-                Success = true,
-                RowsAffected = affected,
-                Message = $"Inserted {affected} row(s)."
-            };
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error inserting row into {Schema}.{Table}", request.SchemaName, request.TableName);
-            return Error.Failure("Tables.InsertError", $"Insert failed: {ex.Message}");
-        }
+        return result.Success
+            ? result
+            : Error.Failure("Tables.InsertError", $"Insert failed: {result.Message}");
     }
 
     public async Task<ErrorOr<ExecutionResult>> UpdateRowAsync(
-        UpdateRowRequest request,
+        UpdateRowCommand request,
         CancellationToken cancellationToken = default)
     {
         var connection = await connectionRepository.GetByIdAsync(request.ConnectionId, cancellationToken);
@@ -164,49 +88,28 @@ public class TableService(
             return Error.NotFound("ConnectionConfig.NotFound",
                 $"Connection config {request.ConnectionId} not found.");
 
-        var setClause = string.Join(", ", request.RowData.Keys.Select((k, i) => $"\"{k}\" = @s{i}"));
-        var whereClause = string.Join(" AND ", request.WhereConditions.Keys.Select((k, i) => $"\"{k}\" = @w{i}"));
-        var query = $"UPDATE \"{request.SchemaName}\".\"{request.TableName}\" SET {setClause} WHERE {whereClause}";
+        var setClause = string.Join(", ",
+            request.RowData.Select(kvp => $"\"{kvp.Key}\" = {ToSqlLiteral(kvp.Value)}"));
 
-        try
-        {
-            await using var npgsqlConnection =
-                new NpgsqlConnection(connectionService.GetConnectionString(connection));
-            await npgsqlConnection.OpenAsync(cancellationToken);
+        var whereClause = string.Join(" AND ",
+            request.WhereConditions.Select(kvp => $"\"{kvp.Key}\" = {ToSqlLiteral(kvp.Value)}"));
 
-            await using var command = new NpgsqlCommand(query, npgsqlConnection);
+        var sql = $"UPDATE \"{request.SchemaName}\".\"{request.TableName}\" SET {setClause} WHERE {whereClause};";
 
-            int si = 0;
-            foreach (var kvp in request.RowData)
-                command.Parameters.AddWithValue($"@s{si++}", kvp.Value ?? DBNull.Value);
+        var query = QueryEntity.Create(connection.Id, sql, QueryType.Update);
 
-            int wi = 0;
-            foreach (var kvp in request.WhereConditions)
-                command.Parameters.AddWithValue($"@w{wi++}", kvp.Value ?? DBNull.Value);
+        var result = await queryService.ExecuteQueryWithResultAsync(query, connection, cancellationToken);
 
-            var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+        await queryRepository.AddAsync(query, cancellationToken);
+        await queryRepository.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Updated {Count} row(s) in {Schema}.{Table}",
-                affected, request.SchemaName, request.TableName);
-
-            return new ExecutionResult
-            {
-                QueryText = query,
-                ExecutedAt = DateTimeOffset.UtcNow,
-                Success = true,
-                RowsAffected = affected,
-                Message = $"Updated {affected} row(s)."
-            };
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error updating row in {Schema}.{Table}", request.SchemaName, request.TableName);
-            return Error.Failure("Tables.UpdateError", $"Update failed: {ex.Message}");
-        }
+        return result.Success
+            ? result
+            : Error.Failure("Tables.UpdateError", $"Update failed: {result.Message}");
     }
 
     public async Task<ErrorOr<ExecutionResult>> DeleteRowAsync(
-        DeleteRowRequest request,
+        DeleteRowCommand request,
         CancellationToken cancellationToken = default)
     {
         var connection = await connectionRepository.GetByIdAsync(request.ConnectionId, cancellationToken);
@@ -214,43 +117,25 @@ public class TableService(
             return Error.NotFound("ConnectionConfig.NotFound",
                 $"Connection config {request.ConnectionId} not found.");
 
-        var whereClause = string.Join(" AND ", request.WhereConditions.Keys.Select((k, i) => $"\"{k}\" = @p{i}"));
-        var query = $"DELETE FROM \"{request.SchemaName}\".\"{request.TableName}\" WHERE {whereClause}";
+        var whereClause = string.Join(" AND ",
+            request.WhereConditions.Select(kvp => $"\"{kvp.Key}\" = {ToSqlLiteral(kvp.Value)}"));
 
-        try
-        {
-            await using var npgsqlConnection = new NpgsqlConnection(connectionService.GetConnectionString(connection));
-            await npgsqlConnection.OpenAsync(cancellationToken);
+        var sql = $"DELETE FROM \"{request.SchemaName}\".\"{request.TableName}\" WHERE {whereClause};";
 
-            await using var command = new NpgsqlCommand(query, npgsqlConnection);
+        var query = QueryEntity.Create(connection.Id, sql, QueryType.Delete);
 
-            int i = 0;
-            foreach (var kvp in request.WhereConditions)
-                command.Parameters.AddWithValue($"@p{i++}", kvp.Value ?? DBNull.Value);
+        var result = await queryService.ExecuteQueryWithResultAsync(query, connection, cancellationToken);
 
-            var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+        await queryRepository.AddAsync(query, cancellationToken);
+        await queryRepository.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Deleted {Count} row(s) from {Schema}.{Table}",
-                affected, request.SchemaName, request.TableName);
-
-            return new ExecutionResult
-            {
-                QueryText = query,
-                ExecutedAt = DateTimeOffset.UtcNow,
-                Success = true,
-                RowsAffected = affected,
-                Message = $"Deleted {affected} row(s)."
-            };
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error deleting row(s) from {Schema}.{Table}", request.SchemaName, request.TableName);
-            return Error.Failure("Tables.DeleteError", $"Delete failed: {ex.Message}");
-        }
+        return result.Success
+            ? result
+            : Error.Failure("Tables.DeleteError", $"Delete failed: {result.Message}");
     }
 
     public async Task<ErrorOr<string>> ExportTableToCsvAsync(
-        ExportTableRequest request,
+        ExportTableCommand request,
         CancellationToken cancellationToken = default)
     {
         var connection = await connectionRepository.GetByIdAsync(request.ConnectionId, cancellationToken);
@@ -296,5 +181,20 @@ public class TableService(
             logger.LogError(ex, "Error exporting {Schema}.{Table} to CSV", request.SchemaName, request.TableName);
             return Error.Failure("Tables.ExportError", $"CSV export failed: {ex.Message}");
         }
+    }
+
+    private static string ToSqlLiteral(object? value)
+    {
+        if (value is null) return "NULL";
+
+        return value switch
+        {
+            string s => $"'{s.Replace("'", "''")}'", // escape single quotes
+            bool b => b ? "TRUE" : "FALSE",
+            int or long or short or byte or decimal or double or float => Convert.ToString(value,
+                CultureInfo.InvariantCulture)!,
+            DateTime dt => $"'{dt:yyyy-MM-dd HH:mm:ss}'",
+            _ => $"'{value.ToString()!.Replace("'", "''")}'"
+        };
     }
 }

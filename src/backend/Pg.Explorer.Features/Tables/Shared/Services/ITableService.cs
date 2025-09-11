@@ -1,7 +1,9 @@
 ﻿using ErrorOr;
+using Pg.Explorer.Features.Tables.DeleteRow;
 using Pg.Explorer.Features.Tables.ExportTable;
 using Pg.Explorer.Features.Tables.GetTableData;
 using Pg.Explorer.Features.Tables.InsertRow;
+using Pg.Explorer.Features.Tables.UpdateRow;
 
 namespace Pg.Explorer.Features.Tables.Shared.Services;
 
@@ -16,14 +18,14 @@ public interface ITableService
         CancellationToken cancellationToken = default);
 
     Task<ErrorOr<ExecutionResult>> UpdateRowAsync(
-        UpdateRowRequest request,
+        UpdateRowCommand request,
         CancellationToken cancellationToken = default);
 
     Task<ErrorOr<ExecutionResult>> DeleteRowAsync(
-        DeleteRowRequest request,
+        DeleteRowCommand request,
         CancellationToken cancellationToken = default);
 
     Task<ErrorOr<string>> ExportTableToCsvAsync(
-        ExportTableRequest request,
+        ExportTableCommand request,
         CancellationToken cancellationToken = default);
 }
