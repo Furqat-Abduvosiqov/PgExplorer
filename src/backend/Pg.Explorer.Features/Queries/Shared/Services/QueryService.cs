@@ -27,10 +27,7 @@ public class QueryService : IQueryService
 
         try
         {
-            var decryptedPassword = _encryptionService.DecryptPassword(connection.EncryptedPassword);
-            var connectionString =
-                $"Host={connection.Host};Port={connection.Port};Database={connection.DatabaseName};" +
-                $"Username={connection.Username};Password={decryptedPassword};Timeout=30;";
+            var connectionString = GetConnectionString(connection);
 
             await using var npgsqlConnection = new NpgsqlConnection(connectionString);
             await npgsqlConnection.OpenAsync(cancellationToken);
@@ -39,46 +36,41 @@ public class QueryService : IQueryService
             command.CommandTimeout = 30;
 
 
-            var trimmedQuery = query.QueryBody.Trim().ToUpperInvariant();
-
-            var isSelectQuery = trimmedQuery.StartsWith("SELECT") ||
-                                trimmedQuery.StartsWith("WITH") ||
-                                trimmedQuery.StartsWith("SHOW") ||
-                                trimmedQuery.StartsWith("EXPLAIN");
-
-            if (isSelectQuery)
+            switch (query.QueryType)
             {
-                var rows = new List<Dictionary<string, object?>>();
-
-                await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-
-                var columnNames = Enumerable.Range(0, reader.FieldCount)
-                    .Select(reader.GetName)
-                    .ToList();
-
-                while (await reader.ReadAsync(cancellationToken))
+                case QueryType.Read:
                 {
-                    var row = new Dictionary<string, object?>();
-                    for (int i = 0; i < reader.FieldCount; i++)
+                    await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
+                    var count = 0;
+                    while (await reader.ReadAsync(cancellationToken))
                     {
-                        row[columnNames[i]] = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                        count++;
                     }
 
-                    rows.Add(row);
+                    query.AffectedRows = count;
+                    break;
                 }
 
-                query.AffectedRows = rows.Count;
+                case QueryType.Write:
+                case QueryType.Delete:
+                case QueryType.Update:
+                {
+                    query.AffectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
+                    break;
+                }
+
+                default:
+                    throw new NotSupportedException($"Unsupported query type: {query.QueryType}");
             }
-            else
-            {
-                query.AffectedRows = await command.ExecuteNonQueryAsync(cancellationToken);
-            }
+
 
             stopwatch.Stop();
 
             query.ExecutionTime = stopwatch.Elapsed;
             query.QueryStatus = QueryStatus.Success;
             query.ExecutedAt = DateTimeOffset.UtcNow;
+            query.ErrorMessage = null;
 
             _logger.LogInformation(
                 "Query executed successfully for connection {ConnectionId}. Execution time: {ExecutionTime}ms",
@@ -98,18 +90,14 @@ public class QueryService : IQueryService
         return query;
     }
 
-    public Task<IEnumerable<QueryHistory>> GetQueryHistoryAsync(int connectionId, int limit = 50)
+    private string GetConnectionString(ConnectionConfig connection)
     {
-        throw new NotImplementedException();
-    }
+        var decryptedPassword = _encryptionService.DecryptPassword(connection.EncryptedPassword);
 
-    public Task<bool> SaveQueryHistoryAsync(QueryHistory queryHistory)
-    {
-        throw new NotImplementedException();
-    }
+        var connectionString =
+            $"Host={connection.Host};Port={connection.Port};Database={connection.DatabaseName};" +
+            $"Username={connection.Username};Password={decryptedPassword};Timeout=30;";
 
-    public Task<bool> ClearQueryHistoryAsync(int connectionId)
-    {
-        throw new NotImplementedException();
+        return connectionString;
     }
 }

@@ -32,9 +32,9 @@ public class SeedService
                 "Default",
                 "localhost",
                 5432,
+                "PgExplorer",
                 "postgres",
-                "postgres",
-                _encryptionService.EncryptPassword("password")
+                _encryptionService.EncryptPassword("postgres")
             );
 
             await _context.ConnectionConfigs.AddAsync(defaultConnection, cancellationToken);
@@ -49,17 +49,11 @@ public class SeedService
                 .Select(c => c.Id)
                 .FirstAsync(cancellationToken);
 
-            var sampleQuery = new QueryEntity
-            {
-                Id = Guid.NewGuid(),
-                ConnectionId = connectionId,
-                QueryBody = "SELECT version();",
-                QueryType = QueryType.Read,
-                ExecutedAt = DateTimeOffset.UtcNow,
-                ExecutionTime = TimeSpan.Zero,
-                QueryStatus = QueryStatus.Success,
-                AffectedRows = 0
-            };
+            var sampleQuery = QueryEntity.Create(connectionId, "SELECT version();", QueryType.Read);
+
+            sampleQuery.Id = Guid.NewGuid();
+            sampleQuery.ExecutionTime = TimeSpan.Zero;
+            sampleQuery.QueryStatus = QueryStatus.Success;
 
             await _context.Queries.AddAsync(sampleQuery, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

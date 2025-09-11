@@ -8,7 +8,7 @@ namespace Pg.Explorer.Shared.Repositories;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
     where TEntity : class
-    where TId : notnull, IEquatable<TId>
+    where TId : IEquatable<TId>
 {
     protected readonly DbContext _context;
     protected readonly DbSet<TEntity> _dbSet;

@@ -15,6 +15,7 @@ public class QueryEntity
 
     public Guid Id { get; set; }
     public long ConnectionId { get; set; }
+
     public virtual ConnectionConfig? ConnectionConfiguration { get; set; }
     public required string QueryBody { get; set; }
     public QueryType QueryType { get; set; }
