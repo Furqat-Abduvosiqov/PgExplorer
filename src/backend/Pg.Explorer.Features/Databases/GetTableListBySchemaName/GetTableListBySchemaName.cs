@@ -9,7 +9,7 @@ using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 using Pg.Explorer.Shared.Pagination;
 
-namespace Pg.Explorer.Features.Tables.GetTableListBySchemaName;
+namespace Pg.Explorer.Features.Databases.GetTableListBySchemaName;
 
 public record GetTableListQuery(
     string? Search,
