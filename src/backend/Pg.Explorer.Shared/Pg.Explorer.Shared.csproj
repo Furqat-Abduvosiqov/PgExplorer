@@ -11,4 +11,10 @@
         <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+            <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.20\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
 </Project>

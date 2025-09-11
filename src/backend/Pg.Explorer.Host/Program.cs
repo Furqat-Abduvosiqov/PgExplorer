@@ -1,12 +1,17 @@
+using System.Text.Json.Serialization;
 using Pg.Explorer.Features;
 using Pg.Explorer.Infrastructure;
 using Pg.Explorer.Infrastructure.Seeding;
 using Pg.Explorer.Shared;
+using Pg.Explorer.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opts => { opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddUtilities();
@@ -21,6 +26,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
