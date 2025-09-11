@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using Pg.Explorer.Domain.ConnectionConfigurations;
 
 namespace Pg.Explorer.Domain.Queries.Entities;
@@ -10,6 +9,10 @@ namespace Pg.Explorer.Domain.Queries.Entities;
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 public class QueryEntity
 {
+    private QueryEntity()
+    {
+    }
+
     public Guid Id { get; set; }
     public long ConnectionId { get; set; }
     public virtual ConnectionConfig? ConnectionConfiguration { get; set; }
@@ -20,5 +23,12 @@ public class QueryEntity
     public QueryStatus QueryStatus { get; set; }
     public string? ErrorMessage { get; set; }
     public int AffectedRows { get; set; }
-    public JsonDocument? ExecutionResult { get; set; }
+
+    public static QueryEntity Create(long connectionId, string queryBody, QueryType queryType) =>
+        new()
+        {
+            ConnectionId = connectionId,
+            QueryBody = queryBody,
+            QueryType = queryType
+        };
 }

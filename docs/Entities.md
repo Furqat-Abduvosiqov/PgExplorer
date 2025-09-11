@@ -28,7 +28,6 @@ Metadata is information we **read directly from PostgreSQL**, not stored by us.
 - Query status (enum)
 - Error message (nullable text)
 - Rows affected (integer)
-- Execution result (jsonb)
 
 ---
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -13,6 +12,10 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:Enum:QueryStatus", "Success,Error")
+                .Annotation("Npgsql:Enum:QueryType", "Read,Write,Delete,Update");
+
             migrationBuilder.CreateTable(
                 name: "connection_configs",
                 columns: table => new
@@ -41,13 +44,12 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                     connection_id = table.Column<long>(type: "bigint", nullable: false),
                     connection_configuration_id = table.Column<long>(type: "bigint", nullable: true),
                     query_body = table.Column<string>(type: "text", nullable: false),
-                    query_type = table.Column<int>(type: "integer", nullable: false),
+                    query_type = table.Column<string>(type: "text", nullable: false),
                     executed_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     execution_time = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    query_status = table.Column<int>(type: "integer", nullable: false),
+                    query_status = table.Column<string>(type: "text", nullable: false),
                     error_message = table.Column<string>(type: "text", nullable: true),
-                    affected_rows = table.Column<int>(type: "integer", nullable: false),
-                    execution_result = table.Column<JsonDocument>(type: "jsonb", nullable: true)
+                    affected_rows = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
