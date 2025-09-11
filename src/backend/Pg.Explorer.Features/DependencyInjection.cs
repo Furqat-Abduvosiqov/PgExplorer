@@ -2,9 +2,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
 using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
 using Pg.Explorer.Features.Queries.Shared.Services;
-using Pg.Explorer.Shared.Endpoints.Abstractions;
 
 namespace Pg.Explorer.Features;
 
@@ -15,7 +15,7 @@ public static class DependencyInjection
         var assembly = Assembly.GetExecutingAssembly();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
         services.AddValidatorsFromAssembly(assembly);
-        services.RegisterEndpointsFromAssemblyContaining<IEndpoint>();
+        services.RegisterEndpointsFromAssemblyContaining<CreateConnectionConfigEndpoint>();
 
         services.AddScoped<IConnectionConfigService, ConnectionConfigService>();
         services.AddScoped<IQueryService, QueryService>();

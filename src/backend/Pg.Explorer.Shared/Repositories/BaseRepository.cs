@@ -19,6 +19,11 @@ public class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>
         _dbSet = _context.Set<TEntity>();
     }
 
+    public IQueryable<TEntity> Query()
+    {
+        return _dbSet.AsNoTracking().AsQueryable();
+    }
+
     public virtual async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
     {
         return await _dbSet.FindAsync([id], cancellationToken);

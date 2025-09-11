@@ -38,7 +38,7 @@ internal sealed class CreateQueryCommandHandler(
         var connection = await connectionRepository.GetByIdAsync(command.ConnectionId, cancellationToken);
         if (connection is null)
         {
-            return Error.NotFound("Connection.NotFound", $"Connection {command.ConnectionId} not found.");
+            return Error.NotFound("Connection.NotFound", $"Connection with id {command.ConnectionId} not found.");
         }
 
         var entity = command.MapToQuery();

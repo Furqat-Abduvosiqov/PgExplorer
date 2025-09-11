@@ -6,6 +6,7 @@ public interface IRepository<TEntity, TId>
     where TEntity : class
     where TId : notnull, IEquatable<TId>
 {
+    IQueryable<TEntity> Query();
     Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default);
     Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
 
