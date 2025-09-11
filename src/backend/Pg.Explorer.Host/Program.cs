@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
 using Pg.Explorer.Features;
 using Pg.Explorer.Infrastructure;
 using Pg.Explorer.Infrastructure.Seeding;
@@ -12,6 +13,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opts => { opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddUtilities();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pg.Explorer.Features.Abstractions;
 using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
+using Pg.Explorer.Features.Queries.Shared.Services;
 
 namespace Pg.Explorer.Features;
 
@@ -15,7 +16,10 @@ public static class DependencyInjection
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
         services.AddValidatorsFromAssembly(assembly);
         services.RegisterEndpointsFromAssemblyContaining<IEndpoint>();
+
         services.AddScoped<IConnectionConfigService, ConnectionConfigService>();
+        services.AddScoped<IQueryService, QueryService>();
+
         return services;
     }
 
