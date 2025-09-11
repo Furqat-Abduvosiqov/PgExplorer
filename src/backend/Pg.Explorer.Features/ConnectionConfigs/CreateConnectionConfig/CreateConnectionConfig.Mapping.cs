@@ -1,5 +1,4 @@
 ﻿using Pg.Explorer.Domain.ConnectionConfigurations;
-using Pg.Explorer.Features.ConnectionConfigs.Shared;
 
 namespace Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
 
@@ -25,15 +24,4 @@ internal static class CreateConnectionConfigMappingExtension
             command.Username,
             encryptedPassword
         );
-
-    public static ConnectionConfigResponse MapToResponse(this ConnectionConfig connection)
-        => new(
-            connection.Id,
-            connection.Name,
-            connection.Host,
-            connection.Port,
-            connection.DatabaseName,
-            connection.Username,
-            connection.CreatedAt,
-            connection.UpdatedAt);
 }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Pg.Explorer.Domain.ConnectionConfigurations;
-using Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
 using Pg.Explorer.Features.ConnectionConfigs.Shared;
 using Pg.Explorer.Shared.Encryptions;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
@@ -89,14 +88,7 @@ public class UpdateConnectionConfigEndpoint : IEndpoint
             return Results.ValidationProblem(validationResult.ToDictionary());
         }
 
-        var command = new UpdateConnectionConfigCommand(
-            id,
-            request.Name,
-            request.Host,
-            request.Port,
-            request.DatabaseName,
-            request.Username,
-            request.Password);
+        var command = request.MapToCommand(id);
 
         var response = await mediator.Send(command, cancellationToken);
         if (response.IsError)

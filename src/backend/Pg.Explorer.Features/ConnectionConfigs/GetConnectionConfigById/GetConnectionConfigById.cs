@@ -25,8 +25,7 @@ internal sealed class GetConnectionConfigByIdQueryHandler(IConnectionConfigRepos
                 description: $"Connection config {request.Id} not found.");
         }
 
-        var response = new ConnectionConfigResponse(entity.Id, entity.Name, entity.Host, entity.Port,
-            entity.DatabaseName, entity.Username, entity.CreatedAt, entity.UpdatedAt);
+        var response = entity.MapToResponse();
         return response;
     }
 }
