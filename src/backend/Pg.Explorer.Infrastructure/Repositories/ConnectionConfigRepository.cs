@@ -1,4 +1,4 @@
-﻿using Pg.Explorer.Domain.ConnectionConfigurations;
+﻿using Pg.Explorer.Domain.ConnectionConfigs;
 using Pg.Explorer.Infrastructure.Database;
 using Pg.Explorer.Shared.Repositories;
 

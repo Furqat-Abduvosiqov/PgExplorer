@@ -2,9 +2,8 @@
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.ConnectionConfigurations;
+using Pg.Explorer.Domain.ConnectionConfigs;
 using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
-using Pg.Explorer.Features.Schemas.Shared;
 using Pg.Explorer.Features.Tables.Shared;
 
 namespace Pg.Explorer.Features.Databases.Shared.Services;
@@ -19,7 +18,7 @@ public class DatabaseService(
         CancellationToken ctx = default)
     {
         var connection = await connectionRepository.GetByIdAsync(connectionId, ctx);
-        if (connection == null)
+        if (connection is null)
             return Error.NotFound(code: "ConnectionConfig.NotFound",
                 description: $"Connection config {connectionId} not found.");
 
@@ -79,10 +78,56 @@ public class DatabaseService(
         return databases;
     }
 
-    public Task<ErrorOr<IEnumerable<SchemaInfo>>> GetSchemasAsync(long connectionId, string databaseName,
+    public async Task<ErrorOr<IEnumerable<SchemaInfo>>> GetSchemasAsync(long connectionId, string databaseName,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var connection = await connectionRepository.GetByIdAsync(connectionId, cancellationToken);
+        if (connection is null)
+            return Error.NotFound(code: "ConnectionConfig.NotFound",
+                description: $"Connection config {connectionId} not found.");
+
+        var schemas = new List<SchemaInfo>();
+
+        try
+        {
+            var connectionString = connectionService.GetConnectionString(connection);
+
+            await using var npgsqlConnection = new NpgsqlConnection(connectionString);
+            await npgsqlConnection.OpenAsync(cancellationToken);
+
+            var query = @"
+                    SELECT 
+                        schema_name as name,
+                        schema_owner as owner,
+                        (SELECT COUNT(*) 
+                         FROM information_schema.tables 
+                         WHERE table_schema = schema_name) as table_count
+                    FROM information_schema.schemata
+                    WHERE schema_name NOT IN ('information_schema', 'pg_catalog', 'pg_toast')
+                    ORDER BY schema_name";
+
+            await using var command = new NpgsqlCommand(query, npgsqlConnection);
+            await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
+            while (await reader.ReadAsync(cancellationToken))
+            {
+                schemas.Add(new SchemaInfo
+                (
+                    reader.GetString("name"),
+                    reader.GetString("owner"),
+                    reader.GetInt32("table_count")
+                ));
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving schemas for database {DatabaseName}", databaseName);
+            return Error.Failure(
+                code: "Error retrieving data",
+                description: $"Could not get schema: {ex.Message}");
+        }
+
+        return schemas;
     }
 
     public Task<ErrorOr<IEnumerable<TableInfo>>> GetTablesAsync(long connectionId, string schemaName,

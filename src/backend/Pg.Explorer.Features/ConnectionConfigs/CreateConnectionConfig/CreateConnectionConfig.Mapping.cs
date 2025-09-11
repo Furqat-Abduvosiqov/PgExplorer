@@ -1,4 +1,4 @@
-﻿using Pg.Explorer.Domain.ConnectionConfigurations;
+﻿using Pg.Explorer.Domain.ConnectionConfigs;
 
 namespace Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
 

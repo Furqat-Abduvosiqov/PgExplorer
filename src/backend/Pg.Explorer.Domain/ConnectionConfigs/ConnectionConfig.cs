@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Pg.Explorer.Domain.Queries.Entities;
 
-namespace Pg.Explorer.Domain.ConnectionConfigurations;
+namespace Pg.Explorer.Domain.ConnectionConfigs;
 
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
 public class ConnectionConfig

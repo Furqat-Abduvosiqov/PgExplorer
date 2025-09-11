@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Pg.Explorer.Domain.ConnectionConfigurations;
+using Pg.Explorer.Domain.ConnectionConfigs;
 
 namespace Pg.Explorer.Domain.Queries.Entities;
 

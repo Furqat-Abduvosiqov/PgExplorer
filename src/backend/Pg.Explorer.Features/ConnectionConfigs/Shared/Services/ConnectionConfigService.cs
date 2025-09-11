@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.ConnectionConfigurations;
+using Pg.Explorer.Domain.ConnectionConfigs;
 using Pg.Explorer.Shared.Encryptions;
 
 namespace Pg.Explorer.Features.ConnectionConfigs.Shared.Services;

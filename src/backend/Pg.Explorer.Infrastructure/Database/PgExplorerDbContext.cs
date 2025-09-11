@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Npgsql.NameTranslation;
-using Pg.Explorer.Domain.ConnectionConfigurations;
+using Pg.Explorer.Domain.ConnectionConfigs;
 using Pg.Explorer.Domain.Queries.Entities;
 
 #pragma warning disable CS0618 // Type or member is obsolete

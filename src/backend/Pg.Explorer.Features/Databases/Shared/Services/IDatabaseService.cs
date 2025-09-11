@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Pg.Explorer.Features.Schemas.Shared;
 using Pg.Explorer.Features.Tables.Shared;
 
 namespace Pg.Explorer.Features.Databases.Shared.Services;

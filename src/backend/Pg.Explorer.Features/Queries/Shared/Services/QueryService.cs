@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.ConnectionConfigurations;
+using Pg.Explorer.Domain.ConnectionConfigs;
 using Pg.Explorer.Domain.Queries.Entities;
 using Pg.Explorer.Shared.Encryptions;
 
