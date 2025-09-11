@@ -47,6 +47,9 @@ public class DeleteConnectionEndpoint : IEndpoint
         IMediator mediator,
         CancellationToken cancellationToken)
     {
+        if (id <= 0)
+            return Results.BadRequest("Invalid id.");
+
         var response = await mediator.Send(new DeleteConnectionCommand(id), cancellationToken);
         if (response.IsError)
         {

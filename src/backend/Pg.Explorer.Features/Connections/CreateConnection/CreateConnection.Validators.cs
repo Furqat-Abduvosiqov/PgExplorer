@@ -2,9 +2,9 @@
 
 namespace Pg.Explorer.Features.Connections.CreateConnection;
 
-public class CreateConnectionConfigValidators : AbstractValidator<CreateConnectionRequest>
+public class CreateConnectionValidator : AbstractValidator<CreateConnectionRequest>
 {
-    public CreateConnectionConfigValidators()
+    public CreateConnectionValidator()
     {
         RuleFor(x => x.Username).NotEmpty().WithMessage("Username is required.");
         RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required.");

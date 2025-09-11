@@ -52,11 +52,7 @@ public class TestConnectionEndpoint : IEndpoint
         CancellationToken cancellationToken)
     {
         if (id <= 0)
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                ["id"] = ["Connection ID is required and must be greater than zero."]
-            });
-
+            return Results.BadRequest("Invalid id.");
 
         var command = new TestConnectionCommand(id);
 

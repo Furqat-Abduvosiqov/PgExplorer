@@ -2,9 +2,9 @@
 
 namespace Pg.Explorer.Features.Connections.UpdateConnection;
 
-public class UpdateConnectionValidators : AbstractValidator<UpdateConnectionRequest>
+public class UpdateConnectionValidator : AbstractValidator<UpdateConnectionRequest>
 {
-    public UpdateConnectionValidators()
+    public UpdateConnectionValidator()
     {
         RuleFor(x => x.Username).NotEmpty();
         RuleFor(x => x.Host).NotEmpty();
