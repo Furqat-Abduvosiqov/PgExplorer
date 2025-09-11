@@ -2,7 +2,7 @@
 
 namespace Pg.Explorer.Features.Tables.InsertRow;
 
-public class InsertRowValidator : AbstractValidator<InsertRowCommand>
+public class InsertRowValidator : AbstractValidator<InsertRowRequest>
 {
     public InsertRowValidator()
     {

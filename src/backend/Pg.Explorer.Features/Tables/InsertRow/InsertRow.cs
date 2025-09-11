@@ -43,8 +43,8 @@ public class InsertRowEndpoint : IEndpoint
 
     private static async Task<IResult> Handle(
         [FromBody] InsertRowRequest request,
-        IValidator<InsertRowRequest> validator,
-        IMediator mediator,
+        [FromServices] IValidator<InsertRowRequest> validator,
+        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);

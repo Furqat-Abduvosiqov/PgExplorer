@@ -41,8 +41,8 @@ public class ExportTableEndpoint : IEndpoint
 
     private static async Task<IResult> Handle(
         [FromBody] ExportTableRequest request,
-        IMediator mediator,
-        IValidator<ExportTableRequest> validator,
+        [FromServices] IMediator mediator,
+        [FromServices] IValidator<ExportTableRequest> validator,
         CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);

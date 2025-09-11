@@ -52,8 +52,8 @@ public class GetTableDataEndpoint : IEndpoint
 
     private static async Task<IResult> Handle(
         [FromBody] GetTableDataRequest request,
-        IMediator mediator,
-        IValidator<GetTableDataRequest> validator,
+        [FromServices] IMediator mediator,
+        [FromServices] IValidator<GetTableDataRequest> validator,
         CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);

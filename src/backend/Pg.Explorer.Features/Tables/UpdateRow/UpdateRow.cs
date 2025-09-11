@@ -45,8 +45,8 @@ public class UpdateRowEndpoint : IEndpoint
 
     private static async Task<IResult> Handle(
         [FromBody] UpdateRowRequest request,
-        IValidator<UpdateRowRequest> validator,
-        IMediator mediator,
+        [FromServices] IValidator<UpdateRowRequest> validator,
+        [FromServices] IMediator mediator,
         CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);

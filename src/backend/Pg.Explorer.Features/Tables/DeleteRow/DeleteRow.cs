@@ -44,8 +44,8 @@ public class DeleteRowEndpoint : IEndpoint
 
     private static async Task<IResult> Handle(
         [FromBody] DeleteRowRequest request,
-        IMediator mediator,
-        IValidator<DeleteRowRequest> validator,
+        [FromServices] IMediator mediator,
+        [FromServices] IValidator<DeleteRowRequest> validator,
         CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
