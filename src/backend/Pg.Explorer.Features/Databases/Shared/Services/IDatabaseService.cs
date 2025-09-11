@@ -14,7 +14,7 @@ public interface IDatabaseService
     Task<ErrorOr<IEnumerable<TableInfo>>> GetTablesAsync(long connectionId, string schemaName,
         CancellationToken cancellationToken = default);
 
-    Task<ErrorOr<TableInfo?>> GetTableInfoAsync(long connectionId, string schemaName, string tableName,
+    Task<ErrorOr<TableInfo>> GetTableInfoAsync(long connectionId, string schemaName, string tableName,
         CancellationToken cancellationToken = default);
 
     Task<ErrorOr<bool>> CreateDatabaseAsync(long connectionId, string databaseName,

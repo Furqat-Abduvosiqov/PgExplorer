@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Pg.Explorer.Domain.Queries.Entities;
 
-namespace Pg.Explorer.Domain.ConnectionConfigs;
+namespace Pg.Explorer.Domain.Connections;
 
 [SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
-public class ConnectionConfig
+public class Connection
 {
-    private ConnectionConfig()
+    private Connection()
     {
     }
 
@@ -22,10 +22,10 @@ public class ConnectionConfig
 
     public ICollection<QueryEntity> Queries { get; set; } = new List<QueryEntity>();
 
-    public static ConnectionConfig Create(string? name, string host, int port, string databaseName, string username,
+    public static Connection Create(string? name, string host, int port, string databaseName, string username,
         string password)
     {
-        return new ConnectionConfig
+        return new Connection
         {
             Name = name,
             Host = host,

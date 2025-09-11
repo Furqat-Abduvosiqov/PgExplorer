@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Npgsql.NameTranslation;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries.Entities;
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -18,7 +18,7 @@ public class PgExplorerDbContext(DbContextOptions<PgExplorerDbContext> options) 
         MapEnum<QueryStatus>();
     }
 
-    public DbSet<ConnectionConfig> ConnectionConfigs { get; set; }
+    public DbSet<Connection> Connections { get; set; }
     public DbSet<QueryEntity> Queries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

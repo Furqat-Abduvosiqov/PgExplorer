@@ -4,23 +4,23 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pg.Explorer.Domain.ConnectionConfigs;
-using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
+using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared.Services;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.TestConnectionConfig;
+namespace Pg.Explorer.Features.Connections.TestConnection;
 
-public sealed record TestConnectionConfigCommand(long ConnectionId) : IRequest<ErrorOr<bool>>;
+public sealed record TestConnectionCommand(long ConnectionId) : IRequest<ErrorOr<bool>>;
 
-internal sealed class TestConnectionConfigCommandHandler(
-    IConnectionConfigService connectionConfigService,
-    IConnectionConfigRepository repository,
-    ILogger<TestConnectionConfigCommandHandler> logger)
-    : IRequestHandler<TestConnectionConfigCommand, ErrorOr<bool>>
+internal sealed class TestConnectionCommandHandler(
+    IConnectionService connectionService,
+    IConnectionRepository repository,
+    ILogger<TestConnectionCommandHandler> logger)
+    : IRequestHandler<TestConnectionCommand, ErrorOr<bool>>
 {
     public async Task<ErrorOr<bool>> Handle(
-        TestConnectionConfigCommand request,
+        TestConnectionCommand request,
         CancellationToken cancellationToken)
     {
         var connection = await repository.GetByIdAsync(request.ConnectionId, cancellationToken);
@@ -28,22 +28,22 @@ internal sealed class TestConnectionConfigCommandHandler(
         {
             logger.LogError($"Connection {request.ConnectionId} not found.");
 
-            return Error.NotFound(code: "ConnectionConfig.NotFound",
-                description: $"Connection config {request.ConnectionId} not found.");
+            return Error.NotFound(code: "Connection.NotFound",
+                description: $"Connection with id {request.ConnectionId} not found.");
         }
 
-        var testResult = await connectionConfigService.TestConnectionAsync(connection);
+        var testResult = await connectionService.TestConnectionAsync(connection);
 
         return testResult;
     }
 }
 
-public class TestConnectionConfigEndpoint : IEndpoint
+public class TestConnectionEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapPost("/api/connection-configs/{id}/test", Handle)
-            .WithTags("ConnectionConfigs");
+        app.MapPost("/api/connections/{id}/test", Handle)
+            .WithTags("Connections");
     }
 
     private static async Task<IResult> Handle(
@@ -58,7 +58,7 @@ public class TestConnectionConfigEndpoint : IEndpoint
             });
 
 
-        var command = new TestConnectionConfigCommand(id);
+        var command = new TestConnectionCommand(id);
 
         var response = await mediator.Send(command, cancellationToken);
         if (response.IsError)

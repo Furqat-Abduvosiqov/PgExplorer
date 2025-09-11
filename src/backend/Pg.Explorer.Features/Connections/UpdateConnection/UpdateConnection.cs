@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pg.Explorer.Domain.ConnectionConfigs;
-using Pg.Explorer.Features.ConnectionConfigs.Shared;
+using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Shared.Encryptions;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.UpdateConnectionConfig;
+namespace Pg.Explorer.Features.Connections.UpdateConnection;
 
-public sealed record UpdateConnectionConfigRequest(
+public sealed record UpdateConnectionRequest(
     string? Name,
     string Host,
     int Port,
@@ -21,7 +21,7 @@ public sealed record UpdateConnectionConfigRequest(
     string Username,
     string? Password);
 
-public sealed record UpdateConnectionConfigCommand(
+public sealed record UpdateConnectionCommand(
     long Id,
     string? Name,
     string Host,
@@ -29,15 +29,15 @@ public sealed record UpdateConnectionConfigCommand(
     string DatabaseName,
     string Username,
     string? Password)
-    : IRequest<ErrorOr<ConnectionConfigResponse>>;
+    : IRequest<ErrorOr<ConnectionResponse>>;
 
-internal sealed class UpdateConnectionConfigCommandHandler(
-    IConnectionConfigRepository repository,
+internal sealed class UpdateConnectionCommandHandler(
+    IConnectionRepository repository,
     IEncryptionService encryptionService,
-    ILogger<UpdateConnectionConfigCommandHandler> logger)
-    : IRequestHandler<UpdateConnectionConfigCommand, ErrorOr<ConnectionConfigResponse>>
+    ILogger<UpdateConnectionCommandHandler> logger)
+    : IRequestHandler<UpdateConnectionCommand, ErrorOr<ConnectionResponse>>
 {
-    public async Task<ErrorOr<ConnectionConfigResponse>> Handle(UpdateConnectionConfigCommand request,
+    public async Task<ErrorOr<ConnectionResponse>> Handle(UpdateConnectionCommand request,
         CancellationToken cancellationToken)
     {
         var entity = await repository.GetByIdAsync(request.Id, cancellationToken);
@@ -67,18 +67,18 @@ internal sealed class UpdateConnectionConfigCommandHandler(
     }
 }
 
-public class UpdateConnectionConfigEndpoint : IEndpoint
+public class UpdateConnectionEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapPut("/api/connection-configs/{id:long}", Handle)
-            .WithTags("ConnectionConfigs");
+        app.MapPut("/api/connections/{id:long}", Handle)
+            .WithTags("Connections");
     }
 
     private static async Task<IResult> Handle(
         [FromRoute] long id,
-        [FromBody] UpdateConnectionConfigRequest request,
-        IValidator<UpdateConnectionConfigRequest> validator,
+        [FromBody] UpdateConnectionRequest request,
+        IValidator<UpdateConnectionRequest> validator,
         IMediator mediator,
         CancellationToken cancellationToken)
     {

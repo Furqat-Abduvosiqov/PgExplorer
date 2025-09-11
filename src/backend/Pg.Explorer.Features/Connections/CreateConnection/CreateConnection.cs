@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pg.Explorer.Domain.ConnectionConfigs;
-using Pg.Explorer.Features.ConnectionConfigs.Shared;
+using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Shared.Encryptions;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
+namespace Pg.Explorer.Features.Connections.CreateConnection;
 
-public sealed record CreateConnectionConfigRequest(
+public sealed record CreateConnectionRequest(
     string? Name,
     string Host,
     int Port,
@@ -21,23 +21,23 @@ public sealed record CreateConnectionConfigRequest(
     string Username,
     string Password);
 
-internal sealed record CreateConnectionConfigCommand(
+internal sealed record CreateConnectionCommand(
     string? Name,
     string Host,
     int Port,
     string DatabaseName,
     string Username,
     string Password)
-    : IRequest<ErrorOr<ConnectionConfigResponse>>;
+    : IRequest<ErrorOr<ConnectionResponse>>;
 
-internal sealed class CreateConnectionConfigCommandHandler(
-    IConnectionConfigRepository repository,
+internal sealed class CreateConnectionCommandHandler(
+    IConnectionRepository repository,
     IEncryptionService encryptionService,
-    ILogger<CreateConnectionConfigCommandHandler> logger)
-    : IRequestHandler<CreateConnectionConfigCommand, ErrorOr<ConnectionConfigResponse>>
+    ILogger<CreateConnectionCommandHandler> logger)
+    : IRequestHandler<CreateConnectionCommand, ErrorOr<ConnectionResponse>>
 {
-    public async Task<ErrorOr<ConnectionConfigResponse>> Handle(
-        CreateConnectionConfigCommand request,
+    public async Task<ErrorOr<ConnectionResponse>> Handle(
+        CreateConnectionCommand request,
         CancellationToken cancellationToken)
     {
         var encryptedPassword = encryptionService.EncryptPassword(request.Password);
@@ -54,17 +54,17 @@ internal sealed class CreateConnectionConfigCommandHandler(
     }
 }
 
-public class CreateConnectionConfigEndpoint : IEndpoint
+public class CreateConnectionEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapPost("/api/connection-configs", Handle)
-            .WithTags("ConnectionConfigs");
+        app.MapPost("/api/connections", Handle)
+            .WithTags("Connections");
     }
 
     private static async Task<IResult> Handle(
-        [FromBody] CreateConnectionConfigRequest request,
-        IValidator<CreateConnectionConfigRequest> validator,
+        [FromBody] CreateConnectionRequest request,
+        IValidator<CreateConnectionRequest> validator,
         IMediator mediator,
         CancellationToken cancellationToken)
     {

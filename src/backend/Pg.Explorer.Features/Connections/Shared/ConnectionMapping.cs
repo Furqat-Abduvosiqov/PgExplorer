@@ -1,10 +1,10 @@
-﻿using Pg.Explorer.Domain.ConnectionConfigs;
+﻿using Pg.Explorer.Domain.Connections;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.Shared;
+namespace Pg.Explorer.Features.Connections.Shared;
 
-public static class ConnectionConfigMapping
+public static class ConnectionMapping
 {
-    public static ConnectionConfigResponse MapToResponse(this ConnectionConfig connection)
+    public static ConnectionResponse MapToResponse(this Connection connection)
         => new(
             connection.Id,
             connection.Name,

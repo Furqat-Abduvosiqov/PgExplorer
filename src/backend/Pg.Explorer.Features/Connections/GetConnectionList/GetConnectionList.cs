@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pg.Explorer.Domain.ConnectionConfigs;
-using Pg.Explorer.Features.ConnectionConfigs.Shared;
+using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 using Pg.Explorer.Shared.Pagination;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.GetConnectionConfigList;
+namespace Pg.Explorer.Features.Connections.GetConnectionList;
 
-public sealed record GetConnectionConfigListQuery(string? Search, PageRequest Page)
-    : IRequest<ErrorOr<PageResult<ConnectionConfigResponse>>>;
+public sealed record GetConnectionListQuery(string? Search, PageRequest Page)
+    : IRequest<ErrorOr<PageResult<ConnectionResponse>>>;
 
-internal sealed class GetConnectionConfigListQueryHandler(IConnectionConfigRepository repository)
-    : IRequestHandler<GetConnectionConfigListQuery, ErrorOr<PageResult<ConnectionConfigResponse>>>
+internal sealed class GetConnectionListQueryHandler(IConnectionRepository repository)
+    : IRequestHandler<GetConnectionListQuery, ErrorOr<PageResult<ConnectionResponse>>>
 {
-    public async Task<ErrorOr<PageResult<ConnectionConfigResponse>>> Handle(
-        GetConnectionConfigListQuery request,
+    public async Task<ErrorOr<PageResult<ConnectionResponse>>> Handle(
+        GetConnectionListQuery request,
         CancellationToken cancellationToken)
     {
         var query = repository.Query();
@@ -35,7 +35,7 @@ internal sealed class GetConnectionConfigListQueryHandler(IConnectionConfigRepos
         }
 
         query = query.OrderByDynamic(
-            request.Page.SortBy ?? nameof(ConnectionConfig.UpdatedAt),
+            request.Page.SortBy ?? nameof(Connection.UpdatedAt),
             desc: request.Page.Desc);
 
         var projected = query.Select(x => x.MapToResponse());
@@ -49,12 +49,12 @@ internal sealed class GetConnectionConfigListQueryHandler(IConnectionConfigRepos
     }
 }
 
-public class GetConnectionConfigListEndpoint : IEndpoint
+public class GetConnectionListEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapGet("/api/connection-configs", Handle)
-            .WithTags("ConnectionConfigs");
+        app.MapGet("/api/connections", Handle)
+            .WithTags("Connections");
     }
 
     private static async Task<IResult> Handle(
@@ -66,7 +66,7 @@ public class GetConnectionConfigListEndpoint : IEndpoint
         [FromQuery] bool desc = false,
         CancellationToken cancellationToken = default)
     {
-        var response = await mediator.Send(new GetConnectionConfigListQuery(search,
+        var response = await mediator.Send(new GetConnectionListQuery(search,
             new PageRequest(page, pageSize, sortBy, desc)), cancellationToken);
 
         if (response.IsError)

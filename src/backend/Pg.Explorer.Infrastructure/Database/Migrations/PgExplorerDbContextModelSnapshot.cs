@@ -24,7 +24,7 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "QueryType", new[] { "Read", "Write", "Delete", "Update" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Pg.Explorer.Domain.ConnectionConfigs.ConnectionConfig", b =>
+            modelBuilder.Entity("Pg.Explorer.Domain.Connections.Connection", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,9 +70,9 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                         .HasColumnName("username");
 
                     b.HasKey("Id")
-                        .HasName("pk_connection_configs");
+                        .HasName("pk_connections");
 
-                    b.ToTable("connection_configs", (string)null);
+                    b.ToTable("connections", (string)null);
                 });
 
             modelBuilder.Entity("Pg.Explorer.Domain.Queries.Entities.QueryEntity", b =>
@@ -128,17 +128,17 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Pg.Explorer.Domain.Queries.Entities.QueryEntity", b =>
                 {
-                    b.HasOne("Pg.Explorer.Domain.ConnectionConfigs.ConnectionConfig", "Connection")
+                    b.HasOne("Pg.Explorer.Domain.Connections.Connection", "Connection")
                         .WithMany("Queries")
                         .HasForeignKey("ConnectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_queries_connection_configs_connection_id");
+                        .HasConstraintName("fk_queries_connections_connection_id");
 
                     b.Navigation("Connection");
                 });
 
-            modelBuilder.Entity("Pg.Explorer.Domain.ConnectionConfigs.ConnectionConfig", b =>
+            modelBuilder.Entity("Pg.Explorer.Domain.Connections.Connection", b =>
                 {
                     b.Navigation("Queries");
                 });

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries.Entities;
 using Pg.Explorer.Infrastructure.Database;
 using Pg.Explorer.Shared.Encryptions;
@@ -26,9 +26,9 @@ public class SeedService
 
         await _context.Database.MigrateAsync(cancellationToken);
 
-        if (!await _context.ConnectionConfigs.AnyAsync(cancellationToken))
+        if (!await _context.Connections.AnyAsync(cancellationToken))
         {
-            var defaultConnection = ConnectionConfig.Create(
+            var defaultConnection = Connection.Create(
                 "Default",
                 "localhost",
                 5432,
@@ -37,14 +37,14 @@ public class SeedService
                 _encryptionService.EncryptPassword("postgres")
             );
 
-            await _context.ConnectionConfigs.AddAsync(defaultConnection, cancellationToken);
+            await _context.Connections.AddAsync(defaultConnection, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("Seeded default connection 'Localhost'.");
         }
 
         if (!await _context.Queries.AnyAsync(cancellationToken))
         {
-            var connectionId = await _context.ConnectionConfigs
+            var connectionId = await _context.Connections
                 .OrderBy(c => c.Id)
                 .Select(c => c.Id)
                 .FirstAsync(cancellationToken);
@@ -54,6 +54,7 @@ public class SeedService
             sampleQuery.Id = Guid.NewGuid();
             sampleQuery.ExecutionTime = TimeSpan.Zero;
             sampleQuery.QueryStatus = QueryStatus.Success;
+            sampleQuery.ExecutedAt = DateTimeOffset.UtcNow;
 
             await _context.Queries.AddAsync(sampleQuery, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

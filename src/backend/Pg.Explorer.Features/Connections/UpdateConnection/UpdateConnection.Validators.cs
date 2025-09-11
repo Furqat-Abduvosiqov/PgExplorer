@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.UpdateConnectionConfig;
+namespace Pg.Explorer.Features.Connections.UpdateConnection;
 
-public class UpdateConnectionConfigValidators : AbstractValidator<UpdateConnectionConfigRequest>
+public class UpdateConnectionValidators : AbstractValidator<UpdateConnectionRequest>
 {
-    public UpdateConnectionConfigValidators()
+    public UpdateConnectionValidators()
     {
         RuleFor(x => x.Username).NotEmpty();
         RuleFor(x => x.Host).NotEmpty();

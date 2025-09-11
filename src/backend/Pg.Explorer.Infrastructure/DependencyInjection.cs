@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Infrastructure.Database;
 using Pg.Explorer.Infrastructure.Repositories;
@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IEncryptionService, EncryptionService>();
         services.AddScoped<SeedService>();
         services.AddScoped<IQueryEntityRepository, QueryEntityRepository>();
-        services.AddScoped<IConnectionConfigRepository, ConnectionConfigRepository>();
+        services.AddScoped<IConnectionRepository, ConnectionRepository>();
 
         return services;
     }

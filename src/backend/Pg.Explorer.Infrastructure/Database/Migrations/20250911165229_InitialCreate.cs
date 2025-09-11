@@ -17,7 +17,7 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                 .Annotation("Npgsql:Enum:QueryType", "Read,Write,Delete,Update");
 
             migrationBuilder.CreateTable(
-                name: "connection_configs",
+                name: "connections",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
@@ -33,7 +33,7 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_connection_configs", x => x.id);
+                    table.PrimaryKey("pk_connections", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,9 +54,9 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                 {
                     table.PrimaryKey("pk_queries", x => x.id);
                     table.ForeignKey(
-                        name: "fk_queries_connection_configs_connection_id",
+                        name: "fk_queries_connections_connection_id",
                         column: x => x.connection_id,
-                        principalTable: "connection_configs",
+                        principalTable: "connections",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -74,7 +74,7 @@ namespace Pg.Explorer.Infrastructure.Database.Migrations
                 name: "queries");
 
             migrationBuilder.DropTable(
-                name: "connection_configs");
+                name: "connections");
         }
     }
 }

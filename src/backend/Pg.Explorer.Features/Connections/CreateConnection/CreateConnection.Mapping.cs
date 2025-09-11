@@ -1,10 +1,10 @@
-﻿using Pg.Explorer.Domain.ConnectionConfigs;
+﻿using Pg.Explorer.Domain.Connections;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
+namespace Pg.Explorer.Features.Connections.CreateConnection;
 
-internal static class CreateConnectionConfigMappingExtension
+internal static class CreateConnectionMappingExtension
 {
-    public static CreateConnectionConfigCommand MapToCommand(this CreateConnectionConfigRequest request)
+    public static CreateConnectionCommand MapToCommand(this CreateConnectionRequest request)
         => new(
             request.Name,
             request.Host,
@@ -13,9 +13,9 @@ internal static class CreateConnectionConfigMappingExtension
             request.Username,
             request.Password);
 
-    public static ConnectionConfig MapToConnectionConfig(this CreateConnectionConfigCommand command,
+    public static Connection MapToConnectionConfig(this CreateConnectionCommand command,
         string encryptedPassword)
-        => ConnectionConfig.Create
+        => Connection.Create
         (
             command.Name,
             command.Host,

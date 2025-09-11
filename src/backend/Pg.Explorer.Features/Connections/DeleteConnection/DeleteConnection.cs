@@ -4,26 +4,26 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.DeleteConnectionConfig;
+namespace Pg.Explorer.Features.Connections.DeleteConnection;
 
-internal sealed record DeleteConnectionConfigCommand(long Id) : IRequest<ErrorOr<Unit>>;
+internal sealed record DeleteConnectionCommand(long Id) : IRequest<ErrorOr<Unit>>;
 
-internal sealed class DeleteConnectionConfigCommandHandler(
-    IConnectionConfigRepository repository,
-    ILogger<DeleteConnectionConfigCommandHandler> logger)
-    : IRequestHandler<DeleteConnectionConfigCommand, ErrorOr<Unit>>
+internal sealed class DeleteConnectionCommandHandler(
+    IConnectionRepository repository,
+    ILogger<DeleteConnectionCommandHandler> logger)
+    : IRequestHandler<DeleteConnectionCommand, ErrorOr<Unit>>
 {
-    public async Task<ErrorOr<Unit>> Handle(DeleteConnectionConfigCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Unit>> Handle(DeleteConnectionCommand request, CancellationToken cancellationToken)
     {
         var entity = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (entity is null)
         {
-            return Error.NotFound(code: "ConnectionConfig.NotFound",
-                description: $"Connection config {request.Id} not found.");
+            return Error.NotFound(code: "Connection.NotFound",
+                description: $"Connection with id {request.Id} not found.");
         }
 
         repository.Remove(entity);
@@ -34,12 +34,12 @@ internal sealed class DeleteConnectionConfigCommandHandler(
     }
 }
 
-public class DeleteConnectionConfigEndpoint : IEndpoint
+public class DeleteConnectionEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapDelete("/api/connection-configs/{id:long}", Handle)
-            .WithTags("ConnectionConfigs");
+        app.MapDelete("/api/connections/{id:long}", Handle)
+            .WithTags("Connections");
     }
 
     private static async Task<IResult> Handle(
@@ -47,7 +47,7 @@ public class DeleteConnectionConfigEndpoint : IEndpoint
         IMediator mediator,
         CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new DeleteConnectionConfigCommand(id), cancellationToken);
+        var response = await mediator.Send(new DeleteConnectionCommand(id), cancellationToken);
         if (response.IsError)
         {
             return response.Errors.ToProblem();

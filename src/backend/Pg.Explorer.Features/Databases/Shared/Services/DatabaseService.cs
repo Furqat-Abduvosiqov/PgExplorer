@@ -2,16 +2,17 @@
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.ConnectionConfigs;
-using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
+using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared.Services;
+using Pg.Explorer.Features.Indexes.Shared;
 using Pg.Explorer.Features.Tables.Shared;
 
 namespace Pg.Explorer.Features.Databases.Shared.Services;
 
 public class DatabaseService(
-    IConnectionConfigRepository connectionRepository,
+    IConnectionRepository connectionRepository,
     ILogger<DatabaseService> logger,
-    IConnectionConfigService connectionService)
+    IConnectionService connectionService)
     : IDatabaseService
 {
     public async Task<ErrorOr<IEnumerable<DatabaseInfo>>> GetDatabasesAsync(long connectionId,

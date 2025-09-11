@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Domain.Queries.Entities;
 using Pg.Explorer.Features.Queries.Shared;
@@ -29,7 +29,7 @@ public sealed record UpdateQueryCommand(
 
 internal sealed class UpdateQueryCommandHandler(
     IQueryEntityRepository repository,
-    IConnectionConfigRepository connectionRepository,
+    IConnectionRepository connectionRepository,
     IQueryService queryService,
     ILogger<UpdateQueryCommandHandler> logger)
     : IRequestHandler<UpdateQueryCommand, ErrorOr<QueryResponse>>

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries.Entities;
 using Pg.Explorer.Shared.Encryptions;
 
@@ -20,7 +20,7 @@ public class QueryService : IQueryService
 
     public async Task<QueryEntity> ExecuteQueryAsync(
         QueryEntity query,
-        ConnectionConfig connection,
+        Connection connection,
         CancellationToken cancellationToken = default)
     {
         var stopwatch = Stopwatch.StartNew();
@@ -90,7 +90,7 @@ public class QueryService : IQueryService
         return query;
     }
 
-    private string GetConnectionString(ConnectionConfig connection)
+    private string GetConnectionString(Connection connection)
     {
         var decryptedPassword = _encryptionService.DecryptPassword(connection.EncryptedPassword);
 

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 
 namespace Pg.Explorer.Domain.Queries.Entities;
 
@@ -15,8 +15,7 @@ public class QueryEntity
 
     public Guid Id { get; set; }
     public long ConnectionId { get; set; }
-
-    public virtual ConnectionConfig? Connection { get; set; }
+    public virtual Connection? Connection { get; set; }
     public required string QueryBody { get; set; }
     public QueryType QueryType { get; set; }
     public DateTimeOffset ExecutedAt { get; set; }

@@ -1,24 +1,24 @@
 ﻿using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.ConnectionConfigs;
+using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Shared.Encryptions;
 
-namespace Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
+namespace Pg.Explorer.Features.Connections.Shared.Services;
 
-public class ConnectionConfigService : IConnectionConfigService
+public class ConnectionService : IConnectionService
 {
     private readonly IEncryptionService _encryptionService;
-    private readonly ILogger<ConnectionConfigService> _logger;
+    private readonly ILogger<ConnectionService> _logger;
 
-    public ConnectionConfigService(ILogger<ConnectionConfigService> logger,
+    public ConnectionService(ILogger<ConnectionService> logger,
         IEncryptionService encryptionService)
     {
         _logger = logger;
         _encryptionService = encryptionService;
     }
 
-    public async Task<ErrorOr<bool>> TestConnectionAsync(ConnectionConfig connection)
+    public async Task<ErrorOr<bool>> TestConnectionAsync(Connection connection)
     {
         try
         {
@@ -45,7 +45,7 @@ public class ConnectionConfigService : IConnectionConfigService
         }
     }
 
-    public string GetConnectionString(ConnectionConfig connection)
+    public string GetConnectionString(Connection connection)
     {
         var decryptedPassword = _encryptionService.DecryptPassword(connection.EncryptedPassword);
 
