@@ -4,12 +4,19 @@ using Pg.Explorer.Features;
 using Pg.Explorer.Infrastructure;
 using Pg.Explorer.Infrastructure.Seeding;
 using Pg.Explorer.Shared;
-using Pg.Explorer.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new()
+    {
+        Title = "PostgreSQL Manager API",
+        Version = "v1",
+        Description = "Web API for PostgreSQL database management"
+    });
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(opts => { opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
@@ -21,6 +28,7 @@ builder.Services.Configure<JsonOptions>(options =>
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddUtilities();
+builder.Services.AddAngularCors();
 builder.Services.AddFeatures();
 
 var app = builder.Build();
@@ -32,7 +40,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseUtilities();
 
 using (var scope = app.Services.CreateScope())
 {

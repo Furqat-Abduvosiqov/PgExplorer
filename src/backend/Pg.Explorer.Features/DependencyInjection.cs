@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Pg.Explorer.Features.ConnectionConfigs.CreateConnectionConfig;
 using Pg.Explorer.Features.ConnectionConfigs.Shared.Services;
+using Pg.Explorer.Features.Databases.Shared.Services;
 using Pg.Explorer.Features.Queries.Shared.Services;
 
 namespace Pg.Explorer.Features;
@@ -19,6 +20,7 @@ public static class DependencyInjection
 
         services.AddScoped<IConnectionConfigService, ConnectionConfigService>();
         services.AddScoped<IQueryService, QueryService>();
+        services.AddScoped<IDatabaseService, DatabaseService>();
 
         return services;
     }

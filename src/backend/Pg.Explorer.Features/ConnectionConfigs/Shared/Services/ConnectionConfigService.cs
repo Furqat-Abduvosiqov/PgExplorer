@@ -22,10 +22,7 @@ public class ConnectionConfigService : IConnectionConfigService
     {
         try
         {
-            var decryptedPassword = _encryptionService.DecryptPassword(connection.EncryptedPassword);
-            var connectionString =
-                $"Host={connection.Host};Port={connection.Port};Database={connection.DatabaseName};" +
-                $"Username={connection.Username};Password={decryptedPassword};Timeout=30;";
+            var connectionString = GetConnectionString(connection);
 
             await using var npgsqlConnection = new NpgsqlConnection(connectionString);
             await npgsqlConnection.OpenAsync();
@@ -46,5 +43,16 @@ public class ConnectionConfigService : IConnectionConfigService
                 code: "Connection.TestFailed",
                 description: $"Could not connect to database: {ex.Message}");
         }
+    }
+
+    public string GetConnectionString(ConnectionConfig connection)
+    {
+        var decryptedPassword = _encryptionService.DecryptPassword(connection.EncryptedPassword);
+
+        var connectionString =
+            $"Host={connection.Host};Port={connection.Port};Database={connection.DatabaseName};" +
+            $"Username={connection.Username};Password={decryptedPassword};Timeout=30;";
+
+        return connectionString;
     }
 }
