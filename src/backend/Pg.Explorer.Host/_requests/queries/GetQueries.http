@@ -1,0 +1,4 @@
+﻿### Get all queries
+GET {{host}}/api/queries?search=&page=1&pageSize=20
+
+###

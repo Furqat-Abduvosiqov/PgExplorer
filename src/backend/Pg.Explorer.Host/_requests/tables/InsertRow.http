@@ -1,0 +1,20 @@
+﻿### Insert row
+POST {{host}}/api/tables/rows
+Content-Type: application/json
+
+{
+  "connectionId": 1,
+  "schemaName": "public",
+  "tableName": "connections",
+  "rowData": {
+    "name": "Local PG",
+    "host": "localhost",
+    "port": 5432,
+    "database_name": "postgres",
+    "created_at": "2025-09-12 03:57:42.352 +0500",
+    "username": "postgres",
+    "encrypted_password": "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAQ7DJS5Uy1E+VgjJMGfrXjAAAAAACAAAAAAAQZgAAAAEAACAAAACayo0+07ITE9PaUDySTXrCl76VgKu35Bmk90qsQc22GwAAAAAOgAAAAAIAACAAAABoXMxfhWVG0PLic4yMgU1OxOCa8ZjE3qdvlthvIznwXBAAAAArjo2+TL/CvKSkqS5ZXrDBQAAAAIm4vWnv2wuLDpv5fCqwpwE7dM7iO1aBcrai1Zk6H9v47Fmta/KFLPVSmvwt+EyMk3selJu/GCK5cqiQNZhAu6M="
+  }
+}
+
+###

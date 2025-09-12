@@ -1,0 +1,5 @@
+﻿### Get table by name
+GET {{host}}/api/tables/users?connectionId=1&schemaName=public
+
+
+###

@@ -1,0 +1,4 @@
+﻿### Get connection by ID
+GET {{host}}/api/connections/1
+
+###

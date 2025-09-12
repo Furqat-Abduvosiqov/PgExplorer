@@ -1,0 +1,10 @@
+﻿### Create database
+POST {{host}}/api/databases
+Content-Type: application/json
+
+{
+  "connectionId": 1,
+  "databaseName": "testdb"
+}
+
+###

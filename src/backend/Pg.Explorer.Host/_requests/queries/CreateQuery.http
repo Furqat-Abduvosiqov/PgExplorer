@@ -1,0 +1,11 @@
+﻿### Create query
+POST {{host}}/api/queries
+Content-Type: application/json
+
+{
+  "connectionId": 1,
+  "queryBody": "SELECT version();",
+  "queryType": "Read"
+}
+
+###

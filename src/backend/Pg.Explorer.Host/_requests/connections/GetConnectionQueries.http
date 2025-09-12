@@ -1,0 +1,4 @@
+﻿### Get queries for a connection
+GET {{host}}/api/connections/1/queries?search=&page=1&pageSize=20&sortBy=&desc=false
+
+###

@@ -1,0 +1,4 @@
+﻿### Get schemas from a database
+GET {{host}}/api/databases/testdb/schemas?connectionId=1&page=1&pageSize=20
+
+###

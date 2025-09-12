@@ -1,0 +1,4 @@
+﻿### Delete database
+DELETE {{host}}/api/databases/testdb?connectionId=1
+
+###

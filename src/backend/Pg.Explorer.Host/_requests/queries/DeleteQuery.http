@@ -1,0 +1,5 @@
+﻿### Delete query
+@queryId = variable value
+DELETE {{host}}/api/queries/{{queryId}}
+
+###

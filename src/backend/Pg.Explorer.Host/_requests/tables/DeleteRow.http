@@ -1,0 +1,14 @@
+﻿### Delete row
+DELETE {{host}}/api/tables/rows
+Content-Type: application/json
+
+{
+  "connectionId": 1,
+  "schemaName": "public",
+  "tableName": "connections",
+  "whereConditions": {
+    "id": 2
+  }
+}
+
+###

@@ -1,0 +1,4 @@
+﻿### Test connection
+POST {{host}}/api/connections/1/test
+
+###

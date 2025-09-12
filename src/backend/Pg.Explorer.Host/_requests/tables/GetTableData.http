@@ -1,0 +1,5 @@
+﻿### Get table data
+GET {{host}}/api/tables/connections/data?connectionId=1&schemaName=public&page=1&pageSize=50
+Accept: application/json
+
+###

@@ -1,0 +1,5 @@
+### Get all connections
+GET {{host}}/api/connections?search=&page=1&pageSize=20&sortBy=&desc=false
+Content-Type: application/json
+
+###

@@ -1,0 +1,4 @@
+﻿### Get tables from schema
+GET {{host}}/api/tables?connectionId=1&schemaName=public&page=1&pageSize=20
+
+###

@@ -1,0 +1,12 @@
+﻿### Update query
+@queryId = variable value
+PUT {{host}}/api/queries/{{queryId}}
+Content-Type: application/json
+
+{
+  "connectionId": 1,
+  "queryBody": "SELECT * FROM users;",
+  "queryType": "Read"
+}
+
+###

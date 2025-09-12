@@ -1,0 +1,4 @@
+﻿### Delete connection
+DELETE {{host}}/api/connections/1
+
+###

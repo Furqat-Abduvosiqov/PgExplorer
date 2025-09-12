@@ -1,0 +1,5 @@
+﻿### Get query by ID
+@queryId = ""
+GET {{host}}/api/queries/{{queryId}}
+
+###

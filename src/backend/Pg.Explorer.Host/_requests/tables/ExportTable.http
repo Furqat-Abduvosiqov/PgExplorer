@@ -1,0 +1,11 @@
+﻿### Export table
+POST {{host}}/api/tables/export
+Content-Type: application/json
+
+{
+  "connectionId": 1,
+  "schemaName": "public",
+  "tableName": "connections"
+}
+
+###
