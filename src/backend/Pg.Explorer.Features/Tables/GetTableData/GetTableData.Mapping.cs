@@ -2,11 +2,11 @@
 
 public static class GetTableDataMappings
 {
-    public static GetTableDataCommand MapToCommand(this GetTableDataRequest request)
+    public static GetTableDataCommand MapToCommand(this GetTableDataQuery query)
         => new(
-            request.ConnectionId,
-            request.SchemaName,
-            request.TableName,
-            request.Page,
-            request.PageSize);
+            query.ConnectionId,
+            query.SchemaName,
+            query.TableName,
+            query.Page,
+            query.PageSize);
 }

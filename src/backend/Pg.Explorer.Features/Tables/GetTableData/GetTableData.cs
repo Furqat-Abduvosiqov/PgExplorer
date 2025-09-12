@@ -12,7 +12,7 @@ using Pg.Explorer.Shared.Endpoints.Extensions;
 
 namespace Pg.Explorer.Features.Tables.GetTableData;
 
-public sealed record GetTableDataRequest(
+public sealed record GetTableDataQuery(
     long ConnectionId,
     string SchemaName,
     string TableName,
@@ -46,16 +46,22 @@ public class GetTableDataEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
-        app.MapPost("/api/tables/data", Handle)
+        app.MapGet("/api/tables/{tableName}/data", Handle)
             .WithTags("Tables");
     }
 
     private static async Task<IResult> Handle(
-        [FromBody] GetTableDataRequest request,
         [FromServices] IMediator mediator,
-        [FromServices] IValidator<GetTableDataRequest> validator,
-        CancellationToken cancellationToken)
+        [FromServices] IValidator<GetTableDataQuery> validator,
+        [FromRoute] string tableName,
+        [FromQuery] long connectionId,
+        [FromQuery] string schemaName,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 50,
+        CancellationToken cancellationToken = default)
     {
+        var request = new GetTableDataQuery(connectionId, schemaName, tableName, page, pageSize);
+
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {

@@ -2,7 +2,7 @@
 
 namespace Pg.Explorer.Features.Tables.GetTableData;
 
-public class GetTableDataValidator : AbstractValidator<GetTableDataRequest>
+public class GetTableDataValidator : AbstractValidator<GetTableDataQuery>
 {
     public GetTableDataValidator()
     {
