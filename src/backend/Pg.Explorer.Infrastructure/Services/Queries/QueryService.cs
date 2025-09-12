@@ -2,11 +2,12 @@
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Pg.Explorer.Domain.Connections;
-using Pg.Explorer.Domain.Queries.Entities;
+using Pg.Explorer.Domain.Queries;
+using Pg.Explorer.Features.Queries.Shared;
 using Pg.Explorer.Features.Tables.Shared;
 using Pg.Explorer.Shared.Encryptions;
 
-namespace Pg.Explorer.Features.Queries.Shared.Services;
+namespace Pg.Explorer.Infrastructure.Services.Queries;
 
 public class QueryService : IQueryService
 {

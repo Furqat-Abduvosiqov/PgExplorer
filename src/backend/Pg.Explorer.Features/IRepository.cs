@@ -1,10 +1,10 @@
 ﻿using System.Linq.Expressions;
 
-namespace Pg.Explorer.Shared.Repositories.interfaces;
+namespace Pg.Explorer.Features;
 
 public interface IRepository<TEntity, TId>
     where TEntity : class
-    where TId : notnull, IEquatable<TId>
+    where TId : IEquatable<TId>
 {
     IQueryable<TEntity> Query();
     Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default);

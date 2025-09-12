@@ -11,6 +11,7 @@
         <PackageReference Include="FluentValidation" Version="12.0.0"/>
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0"/>
         <PackageReference Include="MediatR" Version="13.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.20"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2"/>
         <PackageReference Include="Npgsql" Version="8.0.6"/>
     </ItemGroup>
@@ -21,6 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Pg.Explorer.Domain\Pg.Explorer.Domain.csproj"/>
+        <ProjectReference Include="..\Pg.Explorer.Shared\Pg.Explorer.Shared.csproj"/>
     </ItemGroup>
 
 </Project>

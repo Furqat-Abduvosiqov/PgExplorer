@@ -1,4 +1,4 @@
-using Pg.Explorer.Domain.Queries.Entities;
+using Pg.Explorer.Domain.Queries;
 
 namespace Pg.Explorer.Features.Queries.Shared;
 

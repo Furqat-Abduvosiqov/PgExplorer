@@ -2,7 +2,7 @@
 using Npgsql;
 using Npgsql.NameTranslation;
 using Pg.Explorer.Domain.Connections;
-using Pg.Explorer.Domain.Queries.Entities;
+using Pg.Explorer.Domain.Queries;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 

@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Pg.Explorer.Features.Tables.Shared;
 
-namespace Pg.Explorer.Features.Databases.Shared.Services;
+namespace Pg.Explorer.Features.Databases.Shared;
 
 public interface IDatabaseService
 {

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Pg.Explorer.Domain.Queries.Entities;
+using Pg.Explorer.Domain.Queries;
 
 namespace Pg.Explorer.Domain.Connections;
 
@@ -36,4 +36,6 @@ public class Connection
             CreatedAt = DateTimeOffset.UtcNow,
         };
     }
+
+    public void TouchUpdatedAt() => UpdatedAt = DateTimeOffset.UtcNow;
 }

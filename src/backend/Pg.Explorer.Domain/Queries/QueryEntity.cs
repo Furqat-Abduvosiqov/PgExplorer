@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Pg.Explorer.Domain.Connections;
 
-namespace Pg.Explorer.Domain.Queries.Entities;
+namespace Pg.Explorer.Domain.Queries;
 
 /// <summary>
 /// 

@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;

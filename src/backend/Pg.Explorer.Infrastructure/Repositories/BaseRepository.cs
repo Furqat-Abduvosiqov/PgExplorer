@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Pg.Explorer.Shared.Repositories.interfaces;
+using Pg.Explorer.Features;
 
-namespace Pg.Explorer.Shared.Repositories;
+namespace Pg.Explorer.Infrastructure.Repositories;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class BaseRepository<TEntity, TId> : IRepository<TEntity, TId>

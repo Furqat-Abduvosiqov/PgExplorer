@@ -2,9 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Shared.Encryptions;
 
-namespace Pg.Explorer.Features.Connections.Shared.Services;
+namespace Pg.Explorer.Infrastructure.Services.Connections;
 
 public class ConnectionService : IConnectionService
 {

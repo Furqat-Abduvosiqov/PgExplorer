@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using Pg.Explorer.Domain.Connections;
 
-namespace Pg.Explorer.Features.Connections.Shared.Services;
+namespace Pg.Explorer.Features.Connections.Shared;
 
 public interface IConnectionService
 {

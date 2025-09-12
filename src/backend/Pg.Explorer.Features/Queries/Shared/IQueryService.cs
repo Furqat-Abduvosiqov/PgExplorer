@@ -1,8 +1,8 @@
 ﻿using Pg.Explorer.Domain.Connections;
-using Pg.Explorer.Domain.Queries.Entities;
+using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Features.Tables.Shared;
 
-namespace Pg.Explorer.Features.Queries.Shared.Services;
+namespace Pg.Explorer.Features.Queries.Shared;
 
 public interface IQueryService
 {

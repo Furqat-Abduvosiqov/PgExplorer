@@ -5,7 +5,7 @@ using Pg.Explorer.Features.Tables.GetTableData;
 using Pg.Explorer.Features.Tables.InsertRow;
 using Pg.Explorer.Features.Tables.UpdateRow;
 
-namespace Pg.Explorer.Features.Tables.Shared.Services;
+namespace Pg.Explorer.Features.Tables.Shared;
 
 public interface ITableService
 {

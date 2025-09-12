@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Pg.Explorer.Domain.Connections;
-using Pg.Explorer.Domain.Queries.Entities;
+using Pg.Explorer.Domain.Queries;
 using Pg.Explorer.Infrastructure.Database;
 using Pg.Explorer.Shared.Encryptions;
 

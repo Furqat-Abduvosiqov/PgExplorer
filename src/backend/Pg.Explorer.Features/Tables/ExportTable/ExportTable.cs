@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Pg.Explorer.Features.Tables.Shared.Services;
+using Pg.Explorer.Features.Tables.Shared;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 

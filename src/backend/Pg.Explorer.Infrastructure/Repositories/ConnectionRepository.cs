@@ -1,6 +1,6 @@
 ﻿using Pg.Explorer.Domain.Connections;
+using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Infrastructure.Database;
-using Pg.Explorer.Shared.Repositories;
 
 namespace Pg.Explorer.Infrastructure.Repositories;
 

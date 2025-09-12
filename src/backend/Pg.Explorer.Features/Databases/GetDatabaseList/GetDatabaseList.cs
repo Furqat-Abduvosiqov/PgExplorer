@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pg.Explorer.Features.Databases.Shared;
-using Pg.Explorer.Features.Databases.Shared.Services;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 using Pg.Explorer.Shared.Pagination;

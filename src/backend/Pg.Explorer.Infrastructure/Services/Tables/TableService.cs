@@ -3,18 +3,17 @@ using System.Text;
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.Connections;
 using Pg.Explorer.Domain.Queries;
-using Pg.Explorer.Domain.Queries.Entities;
-using Pg.Explorer.Features.Connections.Shared.Services;
-using Pg.Explorer.Features.Queries.Shared.Services;
+using Pg.Explorer.Features.Connections.Shared;
+using Pg.Explorer.Features.Queries.Shared;
 using Pg.Explorer.Features.Tables.DeleteRow;
 using Pg.Explorer.Features.Tables.ExportTable;
 using Pg.Explorer.Features.Tables.GetTableData;
 using Pg.Explorer.Features.Tables.InsertRow;
+using Pg.Explorer.Features.Tables.Shared;
 using Pg.Explorer.Features.Tables.UpdateRow;
 
-namespace Pg.Explorer.Features.Tables.Shared.Services;
+namespace Pg.Explorer.Infrastructure.Services.Tables;
 
 public class TableService(
     IQueryEntityRepository queryRepository,

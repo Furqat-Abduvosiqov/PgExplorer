@@ -2,11 +2,11 @@
 using ErrorOr;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pg.Explorer.Domain.Connections;
-using Pg.Explorer.Features.Connections.Shared.Services;
+using Pg.Explorer.Features.Connections.Shared;
+using Pg.Explorer.Features.Databases.Shared;
 using Pg.Explorer.Features.Tables.Shared;
 
-namespace Pg.Explorer.Features.Databases.Shared.Services;
+namespace Pg.Explorer.Infrastructure.Services.Databases;
 
 public class DatabaseService(
     IConnectionRepository connectionRepository,
