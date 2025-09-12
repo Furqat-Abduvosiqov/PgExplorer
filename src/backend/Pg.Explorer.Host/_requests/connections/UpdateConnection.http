@@ -1,12 +1,12 @@
 ﻿### Update connection
-PUT {{host}}/api/connections/1
+PUT {{host}}/api/connections/2
 Content-Type: application/json
 
 {
   "name": "Updated Connection",
-  "host": "127.0.0.1",
+  "host": "db",
   "port": 5432,
-  "databaseName": "postgres",
+  "databaseName": "PgExplorer",
   "username": "postgres",
-  "password": "secret"
+  "password": "postgres"
 }

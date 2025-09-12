@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "name": "Local PG",
-  "host": "localhost",
+  "host": "db",
   "port": 5432,
-  "databaseName": "postgres",
+  "databaseName": "PgExplorer",
   "username": "postgres",
-  "password": "admin"
+  "password": "postgres"
 }

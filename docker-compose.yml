@@ -6,7 +6,7 @@ services:
     container_name: pgexplorer-postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: PgExplorer
     ports:
       - "5432:5432"
@@ -28,7 +28,7 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__Postgres: Host=db;Database=PgExplorer;Username=postgres;Password=password;Port=5432
+      ConnectionStrings__Postgres: Host=db;Database=PgExplorer;Username=postgres;Password=postgres;Port=5432
       # Optional: provide a stable AES key; otherwise entrypoint will generate one per container
       # PGEXPLORER_AES_KEY: "${PGEXPLORER_AES_KEY}"
     ports:

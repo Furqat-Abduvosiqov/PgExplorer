@@ -1,4 +1,4 @@
 ﻿### Get databases
-GET {{host}}/api/databases?connectionId=1&page=1&pageSize=20
+GET {{host}}/api/databases?connectionId=2&page=1&pageSize=20
 
 ###
