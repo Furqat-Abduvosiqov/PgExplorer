@@ -1,0 +1,30 @@
+<div class="search-container">
+  <div class="search-input-wrapper">
+    <input
+      (input)="onSearchInput()"
+      [(ngModel)]="searchTerm"
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      class="search-input"
+      type="text"
+    />
+    <button
+      (click)="clearSearch()"
+      *ngIf="searchTerm"
+      class="clear-btn"
+      type="button"
+    >
+      ✕
+    </button>
+  </div>
+  <div *ngIf="showSearchButton" class="search-actions">
+    <button
+      (click)="performSearch()"
+      [disabled]="disabled || isSearching"
+      class="search-btn"
+      type="button"
+    >
+      {{ isSearching ? 'Searching...' : 'Search' }}
+    </button>
+  </div>
+</div>
