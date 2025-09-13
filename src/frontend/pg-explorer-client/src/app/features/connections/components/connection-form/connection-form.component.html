@@ -1,0 +1,174 @@
+<div class="connection-form-container">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Edit Connection' : 'Create Connection' }}</h2>
+    <button
+      (click)="goBack()"
+      class="btn btn-outline"
+    >
+      Cancel
+    </button>
+  </div>
+
+  <app-loading
+    *ngIf="isLoading"
+    [message]="loadingMessage"
+  ></app-loading>
+
+  <app-error-message
+    (dismiss)="error = ''"
+    *ngIf="error"
+    [dismissible]="true"
+    [message]="error"
+    type="error"
+  ></app-error-message>
+
+  <app-error-message
+    (dismiss)="testResult = null"
+    *ngIf="testResult && testResult.isSuccessful"
+    [dismissible]="true"
+    message="Connection test successful!"
+    type="success"
+  ></app-error-message>
+
+  <form (ngSubmit)="onSubmit()" *ngIf="!isLoading" [formGroup]="connectionForm" class="connection-form">
+    <div class="form-section">
+      <h3>Connection Details</h3>
+
+      <div class="form-group">
+        <label for="name">Connection Name *</label>
+        <input
+          [class.is-invalid]="connectionForm.get('name')?.invalid && connectionForm.get('name')?.touched"
+          class="form-control"
+          formControlName="name"
+          id="name"
+          placeholder="My Database Connection"
+          type="text"
+        />
+        <div *ngIf="connectionForm.get('name')?.invalid && connectionForm.get('name')?.touched"
+             class="invalid-feedback">
+          <div *ngIf="connectionForm.get('name')?.errors?.['required']">Connection name is required</div>
+          <div *ngIf="connectionForm.get('name')?.errors?.['minlength']">Connection name must be at least 2 characters
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="host">Host *</label>
+          <input
+            [class.is-invalid]="connectionForm.get('host')?.invalid && connectionForm.get('host')?.touched"
+            class="form-control"
+            formControlName="host"
+            id="host"
+            placeholder="localhost"
+            type="text"
+          />
+          <div *ngIf="connectionForm.get('host')?.invalid && connectionForm.get('host')?.touched"
+               class="invalid-feedback">
+            Host is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="port">Port *</label>
+          <input
+            [class.is-invalid]="connectionForm.get('port')?.invalid && connectionForm.get('port')?.touched"
+            class="form-control"
+            formControlName="port"
+            id="port"
+            placeholder="5432"
+            type="number"
+          />
+          <div *ngIf="connectionForm.get('port')?.invalid && connectionForm.get('port')?.touched"
+               class="invalid-feedback">
+            <div *ngIf="connectionForm.get('port')?.errors?.['required']">Port is required</div>
+            <div *ngIf="connectionForm.get('port')?.errors?.['min'] || connectionForm.get('port')?.errors?.['max']">
+              Port must be between 1 and 65535
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="database">Database *</label>
+        <input
+          [class.is-invalid]="connectionForm.get('database')?.invalid && connectionForm.get('database')?.touched"
+          class="form-control"
+          formControlName="database"
+          id="database"
+          placeholder="postgres"
+          type="text"
+        />
+        <div *ngIf="connectionForm.get('database')?.invalid && connectionForm.get('database')?.touched"
+             class="invalid-feedback">
+          Database name is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Authentication</h3>
+
+      <div class="form-group">
+        <label for="username">Username *</label>
+        <input
+          [class.is-invalid]="connectionForm.get('username')?.invalid && connectionForm.get('username')?.touched"
+          class="form-control"
+          formControlName="username"
+          id="username"
+          placeholder="postgres"
+          type="text"
+        />
+        <div *ngIf="connectionForm.get('username')?.invalid && connectionForm.get('username')?.touched"
+             class="invalid-feedback">
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password {{ isEditMode ? '(leave blank to keep current)' : '*' }}</label>
+        <input
+          [class.is-invalid]="connectionForm.get('password')?.invalid && connectionForm.get('password')?.touched"
+          class="form-control"
+          formControlName="password"
+          id="password"
+          placeholder="Enter password"
+          type="password"
+        />
+        <div *ngIf="connectionForm.get('password')?.invalid && connectionForm.get('password')?.touched"
+             class="invalid-feedback">
+          Password is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button
+        (click)="testConnection()"
+        [disabled]="isSubmitting || isTesting || connectionForm.invalid"
+        class="btn btn-outline"
+        type="button"
+      >
+        {{ isTesting ? 'Testing...' : 'Test Connection' }}
+      </button>
+
+      <div class="action-group">
+        <button
+          (click)="goBack()"
+          [disabled]="isSubmitting"
+          class="btn btn-secondary"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          [disabled]="isSubmitting || connectionForm.invalid"
+          class="btn btn-primary"
+          type="submit"
+        >
+          {{ isSubmitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Connection' : 'Create Connection') }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
