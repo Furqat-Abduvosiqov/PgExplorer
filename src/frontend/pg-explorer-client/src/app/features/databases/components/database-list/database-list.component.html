@@ -1,0 +1,163 @@
+<div class="database-list-container">
+  <div class="header">
+    <h2>Databases</h2>
+    <button
+      (click)="openCreateDatabaseModal()"
+      [disabled]="!selectedConnection"
+      class="btn btn-primary"
+    >
+      Create Database
+    </button>
+  </div>
+
+  <div *ngIf="!selectedConnection" class="no-connection">
+    <div class="alert alert-warning">
+      <h4>No Connection Selected</h4>
+      <p>Please select a database connection first to view databases.</p>
+      <a class="btn btn-primary" routerLink="/connections">Go to Connections</a>
+    </div>
+  </div>
+
+  <div *ngIf="selectedConnection" class="content">
+    <div class="databases-section">
+      <div class="section-header">
+        <h3>Databases</h3>
+        <app-search
+          (search)="onSearch($event)"
+          placeholder="Search databases..."
+        ></app-search>
+      </div>
+
+      <app-loading
+        *ngIf="isLoading"
+        message="Loading databases..."
+      ></app-loading>
+
+      <app-error-message
+        (dismiss)="error = ''"
+        *ngIf="error"
+        [dismissible]="true"
+        [message]="error"
+        type="error"
+      ></app-error-message>
+
+      <div *ngIf="!isLoading && !error" class="databases-list">
+        <div
+          (click)="selectDatabase(database)"
+          *ngFor="let database of databases"
+          [class.selected]="selectedDatabase?.name === database.name"
+          class="database-card"
+        >
+          <div class="database-header">
+            <h4>{{ database.name }}</h4>
+            <div class="database-actions">
+              <button
+                (click)="openDropDatabaseModal(database); $event.stopPropagation()"
+                class="btn btn-sm btn-danger"
+                title="Drop Database"
+              >
+                🗑️
+              </button>
+            </div>
+          </div>
+
+          <div class="database-info">
+            <div class="info-item">
+              <strong>Owner:</strong> {{ database.owner }}
+            </div>
+            <div class="info-item">
+              <strong>Encoding:</strong> {{ database.encoding }}
+            </div>
+            <div class="info-item">
+              <strong>Size:</strong> {{ database.size }}
+            </div>
+            <div *ngIf="database.connectionLimit >= 0" class="info-item">
+              <strong>Connection Limit:</strong> {{ database.connectionLimit }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && !error && databases.length === 0" class="empty-state">
+        <h4>No databases found</h4>
+        <p>No databases match your search criteria.</p>
+      </div>
+
+      <app-pagination
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+        *ngIf="pageResult && !isLoading"
+        [pageResult]="pageResult"
+      ></app-pagination>
+    </div>
+
+    <div *ngIf="selectedDatabase" class="schemas-section">
+      <div class="section-header">
+        <h3>Schemas in {{ selectedDatabase?.name }}</h3>
+        <app-search
+          (search)="onSchemaSearch($event)"
+          placeholder="Search schemas..."
+        ></app-search>
+      </div>
+
+      <app-loading
+        *ngIf="isSchemasLoading"
+        message="Loading schemas..."
+      ></app-loading>
+
+      <app-error-message
+        (dismiss)="schemaError = ''"
+        *ngIf="schemaError"
+        [dismissible]="true"
+        [message]="schemaError"
+        type="error"
+      ></app-error-message>
+
+      <div *ngIf="!isSchemasLoading && !schemaError" class="schemas-list">
+        <div
+          (click)="navigateToTables(schema.name)"
+          *ngFor="let schema of schemas"
+          class="schema-card"
+        >
+          <div class="schema-header">
+            <h4>{{ schema.name }}</h4>
+            <span class="schema-owner">{{ schema.owner }}</span>
+          </div>
+
+          <div *ngIf="schema.privileges && schema.privileges.length > 0" class="schema-privileges">
+            <span *ngFor="let privilege of schema.privileges" class="privilege">{{ privilege }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isSchemasLoading && !schemaError && schemas.length === 0" class="empty-state">
+        <h4>No schemas found</h4>
+        <p>No schemas match your search criteria.</p>
+      </div>
+
+      <app-pagination
+        (pageChange)="onSchemaPageChange($event)"
+        (pageSizeChange)="onSchemaPageSizeChange($event)"
+        *ngIf="schemaPageResult && !isSchemasLoading"
+        [pageResult]="schemaPageResult"
+      ></app-pagination>
+    </div>
+  </div>
+</div>
+
+<!-- Create Database Modal -->
+<app-create-database-modal
+  (close)="closeCreateDatabaseModal()"
+  (created)="onDatabaseCreated()"
+  *ngIf="showCreateDatabaseModal"
+  [connectionId]="selectedConnection?.id || 0"
+></app-create-database-modal>
+
+<!-- Drop Database Modal -->
+<app-drop-database-modal
+  (close)="closeDropDatabaseModal()"
+  (dropped)="onDatabaseDropped()"
+  *ngIf="showDropDatabaseModal"
+  [connectionId]="selectedConnection?.id || 0"
+  [database]="databaseToDelete"
+></app-drop-database-modal>
