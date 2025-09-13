@@ -1,0 +1,105 @@
+<div (click)="onBackdropClick($event)" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Drop Database</h3>
+      <button (click)="onCancel()" class="close-btn" type="button">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="warning-section">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-content">
+          <h4>This action cannot be undone!</h4>
+          <p>
+            You are about to permanently delete the database
+            <strong>"{{ database?.name }}"</strong>.
+            All data in this database will be lost.
+          </p>
+        </div>
+      </div>
+
+      <app-error-message
+        (dismiss)="error = ''"
+        *ngIf="error"
+        [dismissible]="true"
+        [message]="error"
+        type="error"
+      ></app-error-message>
+
+      <div class="confirmation-section">
+        <label for="confirmation">
+          Type the database name <strong>{{ database?.name }}</strong> to confirm:
+        </label>
+        <input
+          [(ngModel)]="confirmationText"
+          [class.is-invalid]="confirmationText && !isConfirmationValid"
+          [class.is-valid]="isConfirmationValid"
+          [placeholder]="database?.name"
+          class="form-control"
+          id="confirmation"
+          type="text"
+        />
+        <div *ngIf="confirmationText && !isConfirmationValid" class="invalid-feedback">
+          Database name does not match
+        </div>
+      </div>
+
+      <div class="options-section">
+        <label class="checkbox-label">
+          <input
+            [(ngModel)]="forceDelete"
+            type="checkbox"
+          />
+          <span class="checkmark"></span>
+          Force delete (terminate active connections)
+        </label>
+        <small class="form-text">
+          Check this option if there are active connections to the database that need to be terminated
+        </small>
+      </div>
+
+      <div class="database-info">
+        <h5>Database Information:</h5>
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Name:</strong> {{ database?.name }}
+          </div>
+          <div class="info-item">
+            <strong>Owner:</strong> {{ database?.owner }}
+          </div>
+          <div class="info-item">
+            <strong>Encoding:</strong> {{ database?.encoding }}
+          </div>
+          <div class="info-item">
+            <strong>Size:</strong> {{ database?.size }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        (click)="onCancel()"
+        [disabled]="isSubmitting"
+        class="btn btn-secondary"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="onSubmit()"
+        [disabled]="isSubmitting || !isConfirmationValid"
+        class="btn btn-danger"
+        type="button"
+      >
+        {{ isSubmitting ? 'Dropping...' : 'Drop Database' }}
+      </button>
+    </div>
+
+    <app-loading
+      *ngIf="isSubmitting"
+      [overlay]="true"
+      message="Dropping database..."
+    ></app-loading>
+  </div>
+</div>
