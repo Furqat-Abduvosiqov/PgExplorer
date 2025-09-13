@@ -1,0 +1,55 @@
+.query-editor-container {
+  padding: 1.5rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+
+  h2 {
+    margin: 0;
+    color: #2c3e50;
+  }
+}
+
+.coming-soon {
+  text-align: center;
+  padding: 3rem;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    color: #495057;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+    color: #495057;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:before {
+      content: '✓';
+      color: #28a745;
+      margin-right: 0.5rem;
+      font-weight: bold;
+    }
+  }
+}
