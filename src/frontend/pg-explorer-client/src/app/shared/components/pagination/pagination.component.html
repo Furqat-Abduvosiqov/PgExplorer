@@ -1,0 +1,57 @@
+<nav *ngIf="pageResult" aria-label="Pagination" class="pagination-wrapper">
+  <div class="pagination-info">
+    <span>
+      Showing {{ getStartIndex() }}-{{ getEndIndex() }} of {{ pageResult?.totalCount }} results
+    </span>
+  </div>
+
+  <div class="pagination-controls">
+    <button
+      (click)="goToPage(1)"
+      [disabled]="!pageResult?.hasPrevious"
+      class="page-btn">
+      First
+    </button>
+
+    <button
+      (click)="goToPage(pageResult.currentPage - 1)"
+      [disabled]="!pageResult?.hasPrevious"
+      class="page-btn">
+      Previous
+    </button>
+
+    <div class="page-numbers">
+      <button
+        (click)="goToPage(page)"
+        *ngFor="let page of getVisiblePages()"
+        [class.active]="page === pageResult?.currentPage"
+        class="page-btn">
+        {{ page }}
+      </button>
+    </div>
+
+    <button
+      (click)="goToPage(pageResult.currentPage + 1)"
+      [disabled]="!pageResult?.hasNext"
+      class="page-btn">
+      Next
+    </button>
+
+    <button
+      (click)="goToPage(pageResult?.totalPages)"
+      [disabled]="!pageResult?.hasNext"
+      class="page-btn">
+      Last
+    </button>
+  </div>
+
+  <div class="page-size-selector">
+    <label>Items per page:</label>
+    <select (change)="onPageSizeChange($event)" [value]="pageResult?.pageSize">
+      <option value="10">10</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+</nav>
