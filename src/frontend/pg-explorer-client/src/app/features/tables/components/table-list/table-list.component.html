@@ -1,0 +1,114 @@
+<div class="table-list-container">
+  <div class="header">
+    <div class="breadcrumb">
+      <button (click)="goBackToDatabases()" class="breadcrumb-link">Databases</button>
+      <span class="separator">></span>
+      <span *ngIf="databaseName" class="current">{{ databaseName }}</span>
+      <span *ngIf="schemaName" class="separator">></span>
+      <span *ngIf="schemaName" class="current">{{ schemaName }}</span>
+    </div>
+    <h2>Tables</h2>
+  </div>
+
+  <div *ngIf="!connectionId || !schemaName" class="no-context">
+    <div class="alert alert-warning">
+      <h4>Missing Context</h4>
+      <p>Connection and schema information is required to view tables.</p>
+      <button (click)="goBackToDatabases()" class="btn btn-primary">Go to Databases</button>
+    </div>
+  </div>
+
+  <div *ngIf="connectionId && schemaName" class="content">
+    <div class="filters">
+      <app-search
+        (search)="onSearch($event)"
+        placeholder="Search tables..."
+      ></app-search>
+    </div>
+
+    <app-loading
+      *ngIf="isLoading"
+      message="Loading tables..."
+    ></app-loading>
+
+    <app-error-message
+      (dismiss)="error = ''"
+      *ngIf="error"
+      [dismissible]="true"
+      [message]="error"
+      type="error"
+    ></app-error-message>
+
+    <div *ngIf="!isLoading && !error" class="tables-grid">
+      <div
+        (click)="navigateToTableData(table)"
+        *ngFor="let table of tables"
+        class="table-card"
+      >
+        <div class="table-header">
+          <h4>{{ table.tableName }}</h4>
+          <div [ngClass]="table.tableType.toLowerCase()" class="table-type-badge">
+            {{ table.tableType }}
+          </div>
+        </div>
+
+        <div class="table-info">
+          <div class="info-row">
+            <div class="info-item">
+              <strong>Schema:</strong> {{ table.schemaName }}
+            </div>
+            <div class="info-item">
+              <strong>Owner:</strong> {{ table.owner }}
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-item">
+              <strong>Est. Rows:</strong> {{ table.estimatedRowCount | number }}
+            </div>
+            <div class="info-item">
+              <strong>Type:</strong> {{ table.tableType }}
+            </div>
+          </div>
+        </div>
+
+        <div class="table-features">
+          <span *ngIf="table.hasIndexes" class="feature" title="Has Indexes">🗋 Indexes</span>
+          <span *ngIf="table.hasTriggers" class="feature" title="Has Triggers">⚡ Triggers</span>
+          <span *ngIf="table.hasRules" class="feature" title="Has Rules">📋 Rules</span>
+          <span *ngIf="table.hasRowSecurity" class="feature" title="Row Level Security">🔒 RLS</span>
+        </div>
+
+        <div (click)="$event.stopPropagation()" class="table-actions">
+          <button
+            (click)="navigateToTableData(table)"
+            class="btn btn-sm btn-primary"
+            title="View Data"
+          >
+            📊 Data
+          </button>
+          <button
+            (click)="exportTable(table)"
+            class="btn btn-sm btn-secondary"
+            title="Export Table"
+          >
+            📁 Export
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && !error && tables.length === 0" class="empty-state">
+      <h4>No tables found</h4>
+      <p *ngIf="currentSearchTerm">No tables match your search criteria.</p>
+      <p *ngIf="!currentSearchTerm">This schema contains no tables.</p>
+    </div>
+
+    <app-pagination
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+      *ngIf="pageResult && !isLoading"
+      [pageResult]="pageResult"
+    ></app-pagination>
+  </div>
+</div>
