@@ -1,0 +1,31 @@
+<div *ngIf="message || error" [ngClass]="typeClass" class="error-container">
+  <div class="error-icon">
+    <span *ngIf="type === 'error'">⚠️</span>
+    <span *ngIf="type === 'warning'">⚠️</span>
+    <span *ngIf="type === 'info'">ℹ️</span>
+    <span *ngIf="type === 'success'">✅</span>
+  </div>
+
+  <div class="error-content">
+    <div *ngIf="title" class="error-title">{{ title }}</div>
+    <div class="error-message">
+      {{ message || (error | json) }}
+    </div>
+    <div *ngIf="details" class="error-details">
+      <details>
+        <summary>Show details</summary>
+        <pre>{{ details }}</pre>
+      </details>
+    </div>
+  </div>
+
+  <button
+    (click)="onDismiss()"
+    *ngIf="dismissible"
+    aria-label="Dismiss"
+    class="error-dismiss"
+    type="button"
+  >
+    ✕
+  </button>
+</div>
