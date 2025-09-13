@@ -1,0 +1,113 @@
+<div class="connection-list-container">
+  <div class="header">
+    <h2>Database Connections</h2>
+    <button
+      class="btn btn-primary"
+      routerLink="/connections/new"
+    >
+      Add Connection
+    </button>
+  </div>
+
+  <div class="filters">
+    <app-search
+      (search)="onSearch($event)"
+      placeholder="Search connections..."
+    ></app-search>
+  </div>
+
+  <app-loading
+    *ngIf="isLoading"
+    message="Loading connections..."
+  ></app-loading>
+
+  <app-error-message
+    (dismiss)="error = ''"
+    *ngIf="error"
+    [dismissible]="true"
+    [message]="error"
+    type="error"
+  ></app-error-message>
+
+  <div *ngIf="!isLoading && !error" class="connections-grid">
+    <div
+      *ngFor="let connection of connections"
+      [class.active]="selectedConnection?.id === connection.id"
+      class="connection-card"
+    >
+      <div class="connection-header">
+        <h3>{{ connection.name }}</h3>
+        <div class="connection-status">
+          <span
+            [class.active]="connection.isActive"
+            [class.inactive]="!connection.isActive"
+            class="status-indicator"
+          ></span>
+          {{ connection.isActive ? 'Active' : 'Inactive' }}
+        </div>
+      </div>
+
+      <div class="connection-details">
+        <div class="detail-item">
+          <strong>Host:</strong> {{ connection.host }}:{{ connection.port }}
+        </div>
+        <div class="detail-item">
+          <strong>Database:</strong> {{ connection.databaseName }}
+        </div>
+        <div class="detail-item">
+          <strong>Username:</strong> {{ connection.username }}
+        </div>
+        <div class="detail-item">
+          <strong>Created:</strong> {{ connection.createdAt | date:'short' }}
+        </div>
+      </div>
+
+      <div class="connection-actions">
+        <button
+          (click)="selectConnection(connection)"
+          class="btn btn-sm btn-outline"
+        >
+          {{ selectedConnection?.id === connection.id ? 'Selected' : 'Select' }}
+        </button>
+        <button
+          (click)="testConnection(connection)"
+          [disabled]="testingConnectionId === connection.id"
+          class="btn btn-sm btn-outline"
+        >
+          {{ testingConnectionId === connection.id ? 'Testing...' : 'Test' }}
+        </button>
+        <button
+          [routerLink]="['/connections', connection.id, 'edit']"
+          class="btn btn-sm btn-secondary"
+        >
+          Edit
+        </button>
+        <button
+          (click)="deleteConnection(connection)"
+          [disabled]="deletingConnectionId === connection.id"
+          class="btn btn-sm btn-danger"
+        >
+          {{ deletingConnectionId === connection.id ? 'Deleting...' : 'Delete' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && !error && connections.length === 0" class="empty-state">
+    <h3>No connections found</h3>
+    <p>Get started by creating your first database connection.</p>
+    <button
+      class="btn btn-primary"
+      routerLink="/connections/new"
+    >
+      Add Connection
+    </button>
+  </div>
+
+  <app-pagination
+    (pageChange)="onPageChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+    *ngIf="pageResult && !isLoading"
+    [pageResult]="pageResult"
+  ></app-pagination>
+</div>
