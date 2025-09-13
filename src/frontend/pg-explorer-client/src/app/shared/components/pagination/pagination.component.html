@@ -38,7 +38,7 @@
     </button>
 
     <button
-      (click)="goToPage(pageResult?.totalPages)"
+      (click)="goToPage(pageResult.totalPages)"
       [disabled]="!pageResult?.hasNext"
       class="page-btn">
       Last

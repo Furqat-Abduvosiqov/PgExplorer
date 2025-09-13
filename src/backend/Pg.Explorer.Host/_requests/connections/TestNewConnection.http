@@ -3,7 +3,7 @@ POST {{host}}/api/connections/test
 Content-Type: application/json
 
 {
-  "host": "db",
+  "host": "localhost",
   "port": 5432,
   "databaseName": "PgExplorer",
   "username": "postgres",
