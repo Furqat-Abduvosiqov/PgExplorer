@@ -1,0 +1,121 @@
+<div (click)="onBackdropClick($event)" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Create Database</h3>
+      <button (click)="onCancel()" class="close-btn" type="button">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <app-error-message
+        (dismiss)="error = ''"
+        *ngIf="error"
+        [dismissible]="true"
+        [message]="error"
+        type="error"
+      ></app-error-message>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="createForm">
+        <div class="form-group">
+          <label for="name">Database Name *</label>
+          <input
+            [class.is-invalid]="createForm.get('name')?.invalid && createForm.get('name')?.touched"
+            class="form-control"
+            formControlName="name"
+            id="name"
+            placeholder="my_database"
+            type="text"
+          />
+          <div *ngIf="createForm.get('name')?.invalid && createForm.get('name')?.touched" class="invalid-feedback">
+            <div *ngIf="createForm.get('name')?.errors?.['required']">Database name is required</div>
+            <div *ngIf="createForm.get('name')?.errors?.['pattern']">
+              Database name must start with a letter or underscore and contain only letters, numbers, and underscores
+            </div>
+          </div>
+          <small class="form-text">Must be a valid PostgreSQL identifier</small>
+        </div>
+
+        <div class="form-group">
+          <label for="owner">Owner</label>
+          <input
+            class="form-control"
+            formControlName="owner"
+            id="owner"
+            placeholder="postgres"
+            type="text"
+          />
+          <small class="form-text">Leave empty to use current user</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="template">Template</label>
+            <select class="form-control" formControlName="template" id="template">
+              <option value="">Default (template1)</option>
+              <option value="template0">template0</option>
+              <option value="template1">template1</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="encoding">Encoding</label>
+            <select class="form-control" formControlName="encoding" id="encoding">
+              <option value="">Default (UTF8)</option>
+              <option value="UTF8">UTF8</option>
+              <option value="LATIN1">LATIN1</option>
+              <option value="SQL_ASCII">SQL_ASCII</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="locale">Locale</label>
+            <input
+              class="form-control"
+              formControlName="locale"
+              id="locale"
+              placeholder="en_US.UTF-8"
+              type="text"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="tablespace">Tablespace</label>
+            <input
+              class="form-control"
+              formControlName="tablespace"
+              id="tablespace"
+              placeholder="pg_default"
+              type="text"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        (click)="onCancel()"
+        [disabled]="isSubmitting"
+        class="btn btn-secondary"
+        type="button"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="onSubmit()"
+        [disabled]="isSubmitting || createForm.invalid"
+        class="btn btn-primary"
+        type="button"
+      >
+        {{ isSubmitting ? 'Creating...' : 'Create Database' }}
+      </button>
+    </div>
+
+    <app-loading
+      *ngIf="isSubmitting"
+      [overlay]="true"
+      message="Creating database..."
+    ></app-loading>
+  </div>
+</div>
