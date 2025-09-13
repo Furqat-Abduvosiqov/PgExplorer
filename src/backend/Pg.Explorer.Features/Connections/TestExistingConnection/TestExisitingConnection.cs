@@ -8,18 +8,18 @@ using Pg.Explorer.Features.Connections.Shared;
 using Pg.Explorer.Shared.Endpoints.Abstractions;
 using Pg.Explorer.Shared.Endpoints.Extensions;
 
-namespace Pg.Explorer.Features.Connections.TestConnection;
+namespace Pg.Explorer.Features.Connections.TestExistingConnection;
 
-public sealed record TestConnectionCommand(long ConnectionId) : IRequest<ErrorOr<bool>>;
+public sealed record TestExistingConnectionCommand(long ConnectionId) : IRequest<ErrorOr<bool>>;
 
-internal sealed class TestConnectionCommandHandler(
+internal sealed class TestExistingConnectionCommandHandler(
     IConnectionService connectionService,
     IConnectionRepository repository,
-    ILogger<TestConnectionCommandHandler> logger)
-    : IRequestHandler<TestConnectionCommand, ErrorOr<bool>>
+    ILogger<TestExistingConnectionCommandHandler> logger)
+    : IRequestHandler<TestExistingConnectionCommand, ErrorOr<bool>>
 {
     public async Task<ErrorOr<bool>> Handle(
-        TestConnectionCommand request,
+        TestExistingConnectionCommand request,
         CancellationToken cancellationToken)
     {
         var connection = await repository.GetByIdAsync(request.ConnectionId, cancellationToken);
@@ -31,13 +31,13 @@ internal sealed class TestConnectionCommandHandler(
                 description: $"Connection with id {request.ConnectionId} not found.");
         }
 
-        var testResult = await connectionService.TestConnectionAsync(connection);
+        var testResult = await connectionService.TestExistingConnectionAsync(connection);
 
         return testResult;
     }
 }
 
-public class TestConnectionEndpoint : IEndpoint
+public class TestExistingConnectionEndpoint : IEndpoint
 {
     public void MapEndpoint(WebApplication app)
     {
@@ -53,7 +53,7 @@ public class TestConnectionEndpoint : IEndpoint
         if (id <= 0)
             return Results.BadRequest("Invalid id.");
 
-        var command = new TestConnectionCommand(id);
+        var command = new TestExistingConnectionCommand(id);
 
         var response = await mediator.Send(command, cancellationToken);
         if (response.IsError)

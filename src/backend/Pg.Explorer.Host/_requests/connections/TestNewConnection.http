@@ -1,0 +1,13 @@
+﻿### Test connection
+POST {{host}}/api/connections/test
+Content-Type: application/json
+
+{
+  "host": "db",
+  "port": 5432,
+  "databaseName": "PgExplorer",
+  "username": "postgres",
+  "password": "postgres"
+}
+
+###
