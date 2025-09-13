@@ -1,0 +1,6 @@
+<div [ngClass]="containerClass" class="loading-container">
+  <div [ngClass]="spinnerClass" class="loading-spinner"></div>
+  <div *ngIf="message" [ngClass]="textClass" class="loading-text">
+    {{ message }}
+  </div>
+</div>
