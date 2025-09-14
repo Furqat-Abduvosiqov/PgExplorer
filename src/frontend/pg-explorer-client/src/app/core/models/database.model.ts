@@ -18,7 +18,7 @@ export interface SchemaInfo {
 
 export interface CreateDatabaseRequest {
   connectionId: number;
-  name: string;
+  databaseName: string;
   owner?: string;
   template?: string;
   encoding?: string;

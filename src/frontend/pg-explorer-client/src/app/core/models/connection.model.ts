@@ -39,5 +39,4 @@ export interface TestConnectionRequest {
 
 export interface TestConnectionResponse {
   isSuccessful: boolean;
-  message: string;
 }

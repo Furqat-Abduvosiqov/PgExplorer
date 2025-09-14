@@ -10,15 +10,15 @@ using Pg.Explorer.Shared.Endpoints.Extensions;
 
 namespace Pg.Explorer.Features.Connections.TestExistingConnection;
 
-public sealed record TestExistingConnectionCommand(long ConnectionId) : IRequest<ErrorOr<bool>>;
+public sealed record TestExistingConnectionCommand(long ConnectionId) : IRequest<ErrorOr<TestConnectionResponse>>;
 
 internal sealed class TestExistingConnectionCommandHandler(
     IConnectionService connectionService,
     IConnectionRepository repository,
     ILogger<TestExistingConnectionCommandHandler> logger)
-    : IRequestHandler<TestExistingConnectionCommand, ErrorOr<bool>>
+    : IRequestHandler<TestExistingConnectionCommand, ErrorOr<TestConnectionResponse>>
 {
-    public async Task<ErrorOr<bool>> Handle(
+    public async Task<ErrorOr<TestConnectionResponse>> Handle(
         TestExistingConnectionCommand request,
         CancellationToken cancellationToken)
     {
@@ -56,11 +56,6 @@ public class TestExistingConnectionEndpoint : IEndpoint
         var command = new TestExistingConnectionCommand(id);
 
         var response = await mediator.Send(command, cancellationToken);
-        if (response.IsError)
-        {
-            return response.Errors.ToProblem();
-        }
-
-        return Results.Ok(response.Value);
+        return response.IsError ? response.Errors.ToProblem() : Results.Ok(response.Value);
     }
 }

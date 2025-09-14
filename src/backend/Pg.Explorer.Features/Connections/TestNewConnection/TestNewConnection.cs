@@ -22,12 +22,12 @@ public sealed record TestNewConnectionCommand(
     int Port,
     string DatabaseName,
     string Username,
-    string Password) : IRequest<ErrorOr<bool>>;
+    string Password) : IRequest<ErrorOr<TestConnectionResponse>>;
 
 internal sealed class TestNewConnectionCommandHandler(IConnectionService connectionService)
-    : IRequestHandler<TestNewConnectionCommand, ErrorOr<bool>>
+    : IRequestHandler<TestNewConnectionCommand, ErrorOr<TestConnectionResponse>>
 {
-    public async Task<ErrorOr<bool>> Handle(
+    public async Task<ErrorOr<TestConnectionResponse>> Handle(
         TestNewConnectionCommand command,
         CancellationToken cancellationToken) => await connectionService.TestNewConnectionAsync(command);
 }

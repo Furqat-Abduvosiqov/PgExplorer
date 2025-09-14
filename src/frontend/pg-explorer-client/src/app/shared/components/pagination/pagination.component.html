@@ -1,14 +1,14 @@
 <nav *ngIf="pageResult" aria-label="Pagination" class="pagination-wrapper">
   <div class="pagination-info">
     <span>
-      Showing {{ getStartIndex() }}-{{ getEndIndex() }} of {{ pageResult?.totalCount }} results
+      Showing {{ getStartIndex() }}-{{ getEndIndex() }} of {{ pageResult.totalCount }} results
     </span>
   </div>
 
   <div class="pagination-controls">
     <button
       (click)="goToPage(1)"
-      [disabled]="!pageResult?.hasPrevious"
+      [disabled]="!pageResult.hasPrevious"
       class="page-btn">
       First
     </button>
@@ -47,7 +47,7 @@
 
   <div class="page-size-selector">
     <label>Items per page:</label>
-    <select (change)="onPageSizeChange($event)" [value]="pageResult?.pageSize">
+    <select (change)="onPageSizeChange($event)" [value]="pageResult.pageSize">
       <option value="10">10</option>
       <option value="20">20</option>
       <option value="50">50</option>

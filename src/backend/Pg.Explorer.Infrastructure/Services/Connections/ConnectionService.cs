@@ -12,7 +12,7 @@ public class ConnectionService(
     ILogger<ConnectionService> logger,
     IEncryptionService encryptionService) : IConnectionService
 {
-    public async Task<ErrorOr<bool>> TestExistingConnectionAsync(Connection connection)
+    public async Task<ErrorOr<TestConnectionResponse>> TestExistingConnectionAsync(Connection connection)
     {
         try
         {
@@ -25,7 +25,7 @@ public class ConnectionService(
                 "Successfully tested connection to {Host}:{Port}/{Database}",
                 connection.Host, connection.Port, connection.DatabaseName);
 
-            return true;
+            return new TestConnectionResponse(true);
         }
         catch (Exception ex)
         {
@@ -39,7 +39,7 @@ public class ConnectionService(
         }
     }
 
-    public async Task<ErrorOr<bool>> TestNewConnectionAsync(TestNewConnectionCommand command)
+    public async Task<ErrorOr<TestConnectionResponse>> TestNewConnectionAsync(TestNewConnectionCommand command)
     {
         try
         {
@@ -52,7 +52,7 @@ public class ConnectionService(
                 "Successfully tested connection to {Host}:{Port}/{Database}",
                 command.Host, command.Port, command.DatabaseName);
 
-            return true;
+            return new TestConnectionResponse(true);
         }
         catch (Exception ex)
         {

@@ -54,8 +54,12 @@ export class ConnectionService {
     return this.httpClient.delete<void>(`/connections/${id}`);
   }
 
-  testConnection(request: TestConnectionRequest): Observable<TestConnectionResponse> {
+  testNewConnection(request: TestConnectionRequest): Observable<TestConnectionResponse> {
     return this.httpClient.post<TestConnectionResponse>('/connections/test', request);
+  }
+
+  testExistingConnection(connectionId: number): Observable<TestConnectionResponse> {
+    return this.httpClient.post<TestConnectionResponse>(`/connections/${connectionId}/test`, {});
   }
 
   getConnectionQueries(connectionId: number, params?: {

@@ -12,6 +12,7 @@ import {SearchComponent} from '../../../../shared/components/search/search.compo
 import {PaginationComponent} from '../../../../shared/components/pagination/pagination.component';
 import {LoadingComponent} from '../../../../shared/components/loading/loading.component';
 import {ErrorMessageComponent} from '../../../../shared/components/error-message/error-message.component';
+import {SuccessMessageService} from "../../../../shared/services/success-message.service";
 
 @Component({
   selector: 'app-connection-list',
@@ -44,7 +45,8 @@ export class ConnectionListComponent implements OnInit, OnDestroy {
   private currentPage = 1;
   private currentPageSize = 20;
 
-  constructor(private connectionService: ConnectionService) {
+  constructor(private connectionService: ConnectionService,
+              private snack: SuccessMessageService) {
   }
 
   ngOnInit(): void {
@@ -82,15 +84,7 @@ export class ConnectionListComponent implements OnInit, OnDestroy {
   testConnection(connection: Connection): void {
     this.testingConnectionId = connection.id;
 
-    const testRequest = {
-      host: connection.host,
-      port: connection.port,
-      databaseName: connection.databaseName,
-      username: connection.username,
-      password: connection.password || ''
-    };
-
-    this.connectionService.testConnection(testRequest)
+    this.connectionService.testExistingConnection(this.testingConnectionId)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => this.testingConnectionId = null)
@@ -98,10 +92,9 @@ export class ConnectionListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           if (result.isSuccessful) {
-            // Show success message
-            console.log('Connection test successful:', result.message);
+            this.snack.show('Connected successfully');
           } else {
-            this.error = result.message;
+            this.error = "Connection test failed";
           }
         },
         error: (error) => {

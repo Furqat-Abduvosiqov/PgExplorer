@@ -14,6 +14,7 @@ import {
 
 import {LoadingComponent} from '../../../../shared/components/loading/loading.component';
 import {ErrorMessageComponent} from '../../../../shared/components/error-message/error-message.component';
+import {SuccessMessageService} from "../../../../shared/services/success-message.service";
 
 @Component({
   selector: 'app-connection-form',
@@ -38,7 +39,7 @@ export class ConnectionFormComponent implements OnInit, OnDestroy {
   isTesting = false;
   error = '';
   loadingMessage = '';
-  testResult: { isSuccessful: boolean; message: string } | null = null;
+  testResult: { isSuccessful: boolean; } | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -46,7 +47,8 @@ export class ConnectionFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private connectionService: ConnectionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snack: SuccessMessageService
   ) {
     this.connectionForm = this.createForm();
   }
@@ -94,7 +96,7 @@ export class ConnectionFormComponent implements OnInit, OnDestroy {
         password: this.connectionForm.value.password
       };
 
-      this.connectionService.testConnection(testRequest)
+      this.connectionService.testNewConnection(testRequest)
         .pipe(
           takeUntil(this.destroy$),
           finalize(() => this.isTesting = false)
@@ -102,8 +104,10 @@ export class ConnectionFormComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (result) => {
             this.testResult = result;
-            if (!result.isSuccessful) {
-              this.error = result.message;
+            if (result.isSuccessful) {
+              this.snack.show('Connected successfully');
+            } else {
+              this.error = "Connection test failed";
             }
           },
           error: (error) => {

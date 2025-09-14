@@ -62,7 +62,7 @@ export class CreateDatabaseModalComponent implements OnInit, OnDestroy {
 
       const request: CreateDatabaseRequest = {
         connectionId: this.connectionId,
-        name: this.createForm.value.name,
+        databaseName: this.createForm.value.name,
         owner: this.createForm.value.owner || undefined,
         template: this.createForm.value.template || undefined,
         encoding: this.createForm.value.encoding || undefined,
