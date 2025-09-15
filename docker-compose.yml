@@ -43,6 +43,8 @@ services:
       - backend
     ports:
       - "4200:4200"
+    environment:
+          - NODE_ENV=production
 
 volumes:
   db_data:
